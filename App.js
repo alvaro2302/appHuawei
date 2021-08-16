@@ -8,7 +8,7 @@
 
 import React from 'react';
 
-import HMSMap, { MapTypes } from "@hmscore/react-native-hms-map";
+import HMSMap, { MapTypes,HMSMarker } from "@hmscore/react-native-hms-map";
 import {
   SafeAreaView,
   ScrollView,
@@ -61,20 +61,21 @@ const App= () =>  {
   };
 
   return (
-    <SafeAreaView>
+    <View>
       
-      <HMSMap
-        style={styles.fullHeight}
+     <HMSMap
         mapType={MapTypes.NORMAL}
-        camera={{
-          target: {
-            latitude: 41.02155220194891,
-            longitude: 29.0037998967586,
-          },
-          zoom: 12,
-        }}
-      />
-    </SafeAreaView>
+        style={{ height: '100%' }}
+        camera={{ target: { latitude: 10, longitude: 55,}, zoom: 11 }}>
+        <HMSMarker
+        coordinate={{ latitude: 57, longitude: 22 }}
+        title="Hello Huawei Map"
+        snippet="This is a snippet!"
+        />
+      </HMSMap>
+        
+
+    </View>
   );
 };
 
