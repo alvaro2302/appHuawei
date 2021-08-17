@@ -28,8 +28,6 @@ build/
 .gradle
 local.properties
 *.iml
-/android/app/agconnect-services.json
-/android/app/mykeystore.jks
 # node.js
 #
 node_modules/
