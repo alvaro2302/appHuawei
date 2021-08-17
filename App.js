@@ -7,7 +7,8 @@
  */
 
 import React from 'react';
-import type {Node} from 'react';
+
+import HMSMap, { MapTypes,HMSMarker } from "@hmscore/react-native-hms-map";
 import {
   SafeAreaView,
   ScrollView,
@@ -26,7 +27,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const Section = ({children, title}): Node => {
+const Section = ({children, title}) => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
@@ -52,7 +53,7 @@ const Section = ({children, title}): Node => {
   );
 };
 
-const App: () => Node = () => {
+const App= () =>  {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -60,33 +61,21 @@ const App: () => Node = () => {
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <View>
+      
+     <HMSMap
+        mapType={MapTypes.NORMAL}
+        style={{ height: '100%' }}
+        camera={{ target: { latitude: 10, longitude: 55,}, zoom: 11 }}>
+        <HMSMarker
+        coordinate={{ latitude: 57, longitude: 22 }}
+        title="Hello Huawei Map"
+        snippet="This is a snippet!"
+        />
+      </HMSMap>
+        
+
+    </View>
   );
 };
 
