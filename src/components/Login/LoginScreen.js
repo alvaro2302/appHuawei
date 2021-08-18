@@ -4,6 +4,7 @@ import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
 const LoginScreen = () => {
   return (
     <View style={styles.container}>
+      <Text style={styles.loginTitle}>login</Text>
       <TouchableOpacity style={[styles.socialLoginButton, styles.huaweiButton]}>
         <Image
           style={[styles.socialLoginButtonImage, styles.huaweiButtonImage]}
@@ -29,7 +30,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFF'
+    backgroundColor: '#FFF',
+    marginTop: 75
+  },
+  loginTitle: {
+    fontSize: 24,
+    textTransform: 'uppercase',
+    position: 'absolute',
+    top: 0,
+    fontFamily: 'Roboto, sans-serif'
   },
   socialLoginButton: {
     flexDirection: 'row',
@@ -61,7 +70,7 @@ const styles = StyleSheet.create({
   socialLoginButtonText: {
     flex: 0.8,
     color: '#FFF',
-    //fontFamily: 'Roboto-Regular',
+    fontFamily: 'Roboto, sans-serif',
     fontSize: 13,
     textTransform: 'uppercase',
     paddingLeft: 35
