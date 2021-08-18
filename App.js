@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-
+import { NavigationContainer } from '@react-navigation/native';
 import HMSMap, { MapTypes,HMSMarker } from "@hmscore/react-native-hms-map";
 import {
   SafeAreaView,
@@ -26,6 +26,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import LoginStack from './src/components/Login/LoginStack';
 import LoginScreen from './src/components/Login/LoginScreen';
 
 const Section = ({children, title}) => {
@@ -62,7 +63,12 @@ const App= () =>  {
   };
 
   return (
-    <LoginScreen />
+
+    <NavigationContainer>
+      <LoginStack/>
+    </NavigationContainer>
+   
+    
     /*
     <View>
       <HMSMap

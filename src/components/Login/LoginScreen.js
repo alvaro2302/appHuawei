@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
+import { color } from 'react-native-reanimated';
 
 const LoginScreen = () => {
   return (
@@ -30,10 +31,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFF',
-    marginTop: 75
+    backgroundColor: '#FFF',    
   },
   loginTitle: {
+    marginTop: 75,
     fontSize: 24,
     textTransform: 'uppercase',
     position: 'absolute',
