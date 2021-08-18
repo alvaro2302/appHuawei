@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-
+import { NavigationContainer } from '@react-navigation/native';
 import HMSMap, { MapTypes,HMSMarker } from "@hmscore/react-native-hms-map";
 import {
   SafeAreaView,
@@ -26,6 +26,8 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import LoginStack from './src/components/Login/LoginStack';
+import LoginScreen from './src/components/Login/LoginScreen';
 
 const Section = ({children, title}) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -61,9 +63,15 @@ const App= () =>  {
   };
 
   return (
+
+    <NavigationContainer>
+      <LoginStack/>
+    </NavigationContainer>
+   
+    
+    /*
     <View>
-      
-     <HMSMap
+      <HMSMap
         mapType={MapTypes.NORMAL}
         style={{ height: '100%' }}
         camera={{ target: { latitude: 10, longitude: 55,}, zoom: 11 }}>
@@ -71,11 +79,9 @@ const App= () =>  {
         coordinate={{ latitude: 57, longitude: 22 }}
         title="Hello Huawei Map"
         snippet="This is a snippet!"
-        />
-      </HMSMap>
-        
-
+      />  
     </View>
+    */
   );
 };
 
