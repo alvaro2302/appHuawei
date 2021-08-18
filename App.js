@@ -26,6 +26,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import LoginScreen from './src/components/Login/LoginScreen';
 
 const Section = ({children, title}) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -61,9 +62,10 @@ const App= () =>  {
   };
 
   return (
+    <LoginScreen />
+    /*
     <View>
-      
-     <HMSMap
+      <HMSMap
         mapType={MapTypes.NORMAL}
         style={{ height: '100%' }}
         camera={{ target: { latitude: 10, longitude: 55,}, zoom: 11 }}>
@@ -71,11 +73,9 @@ const App= () =>  {
         coordinate={{ latitude: 57, longitude: 22 }}
         title="Hello Huawei Map"
         snippet="This is a snippet!"
-        />
-      </HMSMap>
-        
-
+      />  
     </View>
+    */
   );
 };
 
