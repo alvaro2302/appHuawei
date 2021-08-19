@@ -1,19 +1,47 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
-import { color } from 'react-native-reanimated';
+import HMSAccount,{ HMSAccountAuthService, HMSAuthParamConstants, HMSAuthRequestOptionConstants, HMSAuthButton} from "@hmscore/react-native-hms-account";
+const signIn = () => {
+  let signInData = {
+      accountAuthParams: HMSAuthParamConstants.DEFAULT_AUTH_REQUEST_PARAM,
+      authRequestOption: [HMSAuthRequestOptionConstants.ID_TOKEN, HMSAuthRequestOptionConstants.ACCESS_TOKEN],
+      authScopeList: [HMSAuthScopeListConstants.EMAIL]
+  };
+
+  HMSAccountAuthService.signIn(signInData)
+      .then((response) => { console.log(response) })
+      .catch((err) => { console.log(err) });
+};
 
 const LoginScreen = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.loginTitle}>login</Text>
-      <TouchableOpacity style={[styles.socialLoginButton, styles.huaweiButton]}>
+    <View >
+       <Text style={styles.loginTitle}>login</Text>
+      
+      {/* <TouchableOpacity style={[styles.socialLoginButton, styles.huaweiButton]}
+        onPress={onSignIn}
+      >
         <Image
           style={[styles.socialLoginButtonImage, styles.huaweiButtonImage]}
           source={require('../../assets/huawei_login_icon.png')}
           resizeMode='contain'
         />
         <Text style={styles.socialLoginButtonText}>huawei id login</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
+
+      <HMSAuthButton
+          style={styles.viewcontainer}
+          colorPolicy={
+            HMSAccount.HUAWEI_ID_AUTH_BUTTON_COLOR_POLICY_RED
+          }
+          enabled={true}
+          theme={HMSAccount.HUAWEI_ID_AUTH_BUTTON_THEME_FULL_TITLE}
+          cornerRadius={
+            HMSAccount.HUAWEI_ID_AUTH_BUTTON_CORNER_RADIUS_MEDIUM
+          }
+          onPress={()=>signIn}
+          
+      />
       <TouchableOpacity style={[styles.socialLoginButton, styles.guestButton]}>
         <Image
           style={[styles.socialLoginButtonImage, styles.guestButtonImage]}
@@ -22,7 +50,13 @@ const LoginScreen = () => {
         />
         <Text style={styles.socialLoginButtonText}>user guest</Text>
       </TouchableOpacity>
+
+  
+  
+
     </View>
+     
+     
   );
 }
 
@@ -75,7 +109,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     textTransform: 'uppercase',
     paddingLeft: 35
-  }
+  },
+  viewcontainer: {
+    marginTop: 20,
+    height: 38, 
+    
+  },
 });
 
 export default LoginScreen;

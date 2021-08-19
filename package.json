@@ -11,6 +11,7 @@
     "generateApk": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res"
   },
   "dependencies": {
+    "@hmscore/react-native-hms-account": "^5.2.0-300",
     "@hmscore/react-native-hms-map": "^5.2.0-302",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/native": "^6.0.2",
