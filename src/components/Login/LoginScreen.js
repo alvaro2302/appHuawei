@@ -1,48 +1,33 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
-import HMSAccount,{ HMSAccountAuthService, HMSAuthParamConstants, HMSAuthRequestOptionConstants, HMSAuthButton} from "@hmscore/react-native-hms-account";
-const signIn = () => {
-  let signInData = {
-      accountAuthParams: HMSAuthParamConstants.DEFAULT_AUTH_REQUEST_PARAM,
-      authRequestOption: [HMSAuthRequestOptionConstants.ID_TOKEN, HMSAuthRequestOptionConstants.ACCESS_TOKEN],
-      authScopeList: [HMSAuthScopeListConstants.EMAIL]
-  };
+import HMSAccount, {HMSAuthRequestOptionConstants, HMSAccountAuthService, HMSAuthParamConstants, HMSAuthScopeListConstants, HMSAuthButton} from '@hmscore/react-native-hms-account';
 
+const signInWithIdToken = () => {
+  let signInData = {
+    accountAuthParams: HMSAuthParamConstants.DEFAULT_AUTH_REQUEST_PARAM,
+    authRequestOption: [HMSAuthRequestOptionConstants.ID_TOKEN, HMSAuthRequestOptionConstants.ACCESS_TOKEN],
+    authScopeList: [HMSAuthScopeListConstants.EMAIL]
+  };
   HMSAccountAuthService.signIn(signInData)
-      .then((response) => { console.log(response) })
-      .catch((err) => { console.log(err) });
+    .then((response) => { console.log("Sign In With IdToken -> ", response) })
+    .catch((err) => { console.log("Sign In With IdToken -> ", err) });
 };
 
 const LoginScreen = () => {
   return (
     <View >
-       <Text style={styles.loginTitle}>login</Text>
+      <Text style={styles.loginTitle}>login</Text>
       
-      {/* <TouchableOpacity style={[styles.socialLoginButton, styles.huaweiButton]}
-        onPress={onSignIn}
-      >
+      <TouchableOpacity style={[styles.socialLoginButton, styles.huaweiButton]} onPress={signInWithIdToken}>
         <Image
           style={[styles.socialLoginButtonImage, styles.huaweiButtonImage]}
           source={require('../../assets/huawei_login_icon.png')}
           resizeMode='contain'
         />
         <Text style={styles.socialLoginButtonText}>huawei id login</Text>
-      </TouchableOpacity> */}
+      </TouchableOpacity>
 
-      <HMSAuthButton
-          style={styles.viewcontainer}
-          colorPolicy={
-            HMSAccount.HUAWEI_ID_AUTH_BUTTON_COLOR_POLICY_RED
-          }
-          enabled={true}
-          theme={HMSAccount.HUAWEI_ID_AUTH_BUTTON_THEME_FULL_TITLE}
-          cornerRadius={
-            HMSAccount.HUAWEI_ID_AUTH_BUTTON_CORNER_RADIUS_MEDIUM
-          }
-          onPress={()=>signIn}
-          
-      />
-      <TouchableOpacity style={[styles.socialLoginButton, styles.guestButton]}>
+      <TouchableOpacity style={[styles.socialLoginButton, styles.guestButton]} onPress={signInWithIdToken}>
         <Image
           style={[styles.socialLoginButtonImage, styles.guestButtonImage]}
           source={require('../../assets/guest_login_icon.png')}
@@ -50,13 +35,7 @@ const LoginScreen = () => {
         />
         <Text style={styles.socialLoginButtonText}>user guest</Text>
       </TouchableOpacity>
-
-  
-  
-
     </View>
-     
-     
   );
 }
 
@@ -112,8 +91,7 @@ const styles = StyleSheet.create({
   },
   viewcontainer: {
     marginTop: 20,
-    height: 38, 
-    
+    height: 38
   },
 });
 
