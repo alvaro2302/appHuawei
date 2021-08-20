@@ -1,6 +1,7 @@
-import React from "react";
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from "./HomeScreen";
+import HomeScreen from './HomeScreen';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const screenOptions = {
   tabBarShowLabel: false
@@ -12,9 +13,9 @@ const HomeStack = () => {
   return (
     <Tab.Navigator screenOptions={screenOptions}>
       <Tab.Screen name='Home' component={HomeScreen} options={{
-        /*tabBarIcon: () => {
-          return <Ionicons name="home-outline" size={16} color="#000" />;
-        }*/
+        tabBarIcon: () => {
+          return <Icon name='home-outline' size={16} color='#000' />
+        }
       }} />
     </Tab.Navigator>
   )

@@ -9,8 +9,8 @@ const signInWithIdToken = () => {
     authScopeList: [HMSAuthScopeListConstants.EMAIL]
   };
   HMSAccountAuthService.signIn(signInData)
-    .then((response) => { console.log("Sign In With IdToken -> ", response) })
-    .catch((err) => { console.log("Sign In With IdToken -> ", err) });
+    .then((response) => { console.log('Sign In With IdToken -> ', response) })
+    .catch((err) => { console.log('Sign In With IdToken -> ', err) });
 };
 
 const LoginScreen = ({navigation}) => {

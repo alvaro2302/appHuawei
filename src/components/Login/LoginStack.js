@@ -1,7 +1,7 @@
-import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import LoginScreen from "./LoginScreen";
-import HomeStack from "../Home/HomeStack";
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import LoginScreen from './LoginScreen';
+import HomeStack from '../Home/HomeStack';
 
 const screenOptions = {
   headerTransparent: true,
