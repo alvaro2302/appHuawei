@@ -1,12 +1,24 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
-import { color } from 'react-native-reanimated';
+import HMSAccount, {HMSAuthRequestOptionConstants, HMSAccountAuthService, HMSAuthParamConstants, HMSAuthScopeListConstants, HMSAuthButton} from '@hmscore/react-native-hms-account';
+
+const signInWithIdToken = () => {
+  let signInData = {
+    accountAuthParams: HMSAuthParamConstants.DEFAULT_AUTH_REQUEST_PARAM,
+    authRequestOption: [HMSAuthRequestOptionConstants.ID_TOKEN, HMSAuthRequestOptionConstants.ACCESS_TOKEN],
+    authScopeList: [HMSAuthScopeListConstants.EMAIL]
+  };
+  HMSAccountAuthService.signIn(signInData)
+    .then((response) => { console.log("Sign In With IdToken -> ", response) })
+    .catch((err) => { console.log("Sign In With IdToken -> ", err) });
+};
 
 const LoginScreen = () => {
   return (
-    <View style={styles.container}>
+    <View >
       <Text style={styles.loginTitle}>login</Text>
-      <TouchableOpacity style={[styles.socialLoginButton, styles.huaweiButton]}>
+      
+      <TouchableOpacity style={[styles.socialLoginButton, styles.huaweiButton]} onPress={signInWithIdToken}>
         <Image
           style={[styles.socialLoginButtonImage, styles.huaweiButtonImage]}
           source={require('../../assets/huawei_login_icon.png')}
@@ -14,7 +26,8 @@ const LoginScreen = () => {
         />
         <Text style={styles.socialLoginButtonText}>huawei id login</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.socialLoginButton, styles.guestButton]}>
+
+      <TouchableOpacity style={[styles.socialLoginButton, styles.guestButton]} onPress={signInWithIdToken}>
         <Image
           style={[styles.socialLoginButtonImage, styles.guestButtonImage]}
           source={require('../../assets/guest_login_icon.png')}
@@ -75,7 +88,11 @@ const styles = StyleSheet.create({
     fontSize: 13,
     textTransform: 'uppercase',
     paddingLeft: 35
-  }
+  },
+  viewcontainer: {
+    marginTop: 20,
+    height: 38
+  },
 });
 
 export default LoginScreen;

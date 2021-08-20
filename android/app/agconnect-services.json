@@ -1,4 +1,10 @@
 {
+	"agcgw":{
+		"backurl":"connect-dra.dbankcloud.cn",
+		"url":"connect-dra.hispace.hicloud.com",
+		"websocketbackurl":"connect-ws-dra.hispace.dbankcloud.cn",
+		"websocketurl":"connect-ws-dra.hispace.dbankcloud.com"
+	},
 	"agcgw_all":{
 		"CN":"connect-drcn.hispace.hicloud.com",
 		"CN_back":"connect-drcn.dbankcloud.cn",
@@ -11,36 +17,53 @@
 	},
 	"client":{
 		"cp_id":"2640591000020630200",
-		"product_id":"736430079245938153",
-		"client_id":"694012171012553472",
-		"client_secret":"7EF04B4489BEAAE2F601F1FC4E4B3B73ED603F7D174A50054B9F569F723FFC0E",
-		"project_id":"736430079245938153",
-		"app_id":"104629531",
-		"api_key":"CwEAAAAA+isGat9ptruqSA4J9a28q+QQhEC/6079MZ0Hng/0V9IQevRWalGQyHkD7yIYiwMG9upKW6CSCcUkBj2EBFPNoG6yi9Q=",
+		"product_id":"736430079245950918",
+		"client_id":"697507276851790720",
+		"client_secret":"9D7A348EC76F71BBFB167A8ED40BEFFF1236C9CB969FB4C6E709CA73EE73E13A",
+		"project_id":"736430079245950918",
+		"app_id":"104647391",
+		"api_key":"CwEAAAAADBhobOD/6nxg54FVOrDqfuJIgTJ5RcWNebRfbTtLr+jCdE8wvGUb/Gt0DnS/Jrod+6CsMKLR7Vn4wuiW/JLYdsT+shg=",
 		"package_name":"com.apphuawei"
 	},
 	"oauth_client":{
-		"client_id":"104629531",
+		"client_id":"104647391",
 		"client_type":1
 	},
 	"app_info":{
-		"app_id":"104629531",
+		"app_id":"104647391",
 		"package_name":"com.apphuawei"
 	},
+	"service":{
+		"analytics":{
+			"collector_url":"datacollector-dra.dt.hicloud.com,datacollector-dra.dt.dbankcloud.cn",
+			"resource_id":"p1",
+			"channel_id":""
+		},
+		"search":{
+			"url":"https://search-dra.cloud.huawei.com"
+		},
+		"cloudstorage":{
+			"storage_url":"https://ops-dra.agcstorage.link"
+		},
+		"ml":{
+			"mlservice_url":"ml-api-dra.ai.dbankcloud.com,ml-api-dra.ai.dbankcloud.cn"
+		}
+	},
+	"region":"SG",
 	"configuration_version":"3.0",
 	"appInfos":[
 		{
 			"package_name":"com.apphuawei",
 			"client":{
-				"app_id":"104629531"
+				"app_id":"104647391"
 			},
 			"app_info":{
 				"package_name":"com.apphuawei",
-				"app_id":"104629531"
+				"app_id":"104647391"
 			},
 			"oauth_client":{
 				"client_type":1,
-				"client_id":"104629531"
+				"client_id":"104647391"
 			}
 		}
 	]
