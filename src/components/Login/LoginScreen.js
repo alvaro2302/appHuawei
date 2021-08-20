@@ -13,7 +13,7 @@ const signInWithIdToken = () => {
     .catch((err) => { console.log("Sign In With IdToken -> ", err) });
 };
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.loginTitle}>login</Text>
@@ -27,7 +27,7 @@ const LoginScreen = () => {
         <Text style={styles.socialLoginButtonText}>huawei id login</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={[styles.socialLoginButton, styles.guestButton]} onPress={signInWithIdToken}>
+      <TouchableOpacity style={[styles.socialLoginButton, styles.guestButton]} onPress={() => navigation.navigate('Guest')}>
         <Image
           style={[styles.socialLoginButtonImage, styles.guestButtonImage]}
           source={require('../../assets/guest_login_icon.png')}
