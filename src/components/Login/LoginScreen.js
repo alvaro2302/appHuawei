@@ -15,7 +15,7 @@ const signInWithIdToken = () => {
 
 const LoginScreen = () => {
   return (
-    <View >
+    <View style={styles.container}>
       <Text style={styles.loginTitle}>login</Text>
       
       <TouchableOpacity style={[styles.socialLoginButton, styles.huaweiButton]} onPress={signInWithIdToken}>
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFF',    
+    backgroundColor: '#FFF'
   },
   loginTitle: {
     marginTop: 75,

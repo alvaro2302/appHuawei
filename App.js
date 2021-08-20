@@ -62,12 +62,13 @@ const App= () =>  {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  /**/
+
   return (
 
     <NavigationContainer>
-      <LoginStack/>
+      <LoginStack />
     </NavigationContainer>
-   
     
     /*
     <View>
