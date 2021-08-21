@@ -7,24 +7,32 @@ import MapScreen from '../Map/MapScreen';
 const screenOptions = {
   tabBarShowLabel: false
 }
-
+const COLOR_INACTIVE = "black";
+const COLOR_ACTIVE = "tomato";
+const colorActivateIcon =(focused)=>{
+  return focused ? COLOR_ACTIVE : COLOR_INACTIVE;
+}
 const Tab = createBottomTabNavigator();
 
 const HomeStack = () => {
   return (
-    <Tab.Navigator screenOptions={screenOptions}>
+    <Tab.Navigator screenOptions={screenOptions} screenOptions={{tintColor:'white',
+    tabBarActiveTintColor:COLOR_ACTIVE}}>
+      
       <Tab.Screen name='Home' component={HomeScreen} options={{
-        tabBarIcon: () => {
-          return <Icon name='home-outline' size={16} color='#000' />
+        tabBarIcon: ({focused}) => {
+          return <Icon name='home' size={16} color='#000' color={colorActivateIcon(focused)} />
         }
       }} />
       <Tab.Screen name='Map' component={MapScreen} options={{
-        tabBarIcon: () => {
-          return <Icon name='map-outline' size={16} color='#000' />
+        tabBarIcon: ({focused}) => {
+          return <Icon name='map' size={16} color='#000'  color={colorActivateIcon(focused)}/>
         }
       }} />
     </Tab.Navigator>
   )
 }
+
+
 
 export default HomeStack;
