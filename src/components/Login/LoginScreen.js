@@ -9,13 +9,13 @@ const signInWithIdToken = () => {
     authScopeList: [HMSAuthScopeListConstants.EMAIL]
   };
   HMSAccountAuthService.signIn(signInData)
-    .then((response) => { console.log("Sign In With IdToken -> ", response) })
-    .catch((err) => { console.log("Sign In With IdToken -> ", err) });
+    .then((response) => { console.log('Sign In With IdToken -> ', response) })
+    .catch((err) => { console.log('Sign In With IdToken -> ', err) });
 };
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
   return (
-    <View >
+    <View style={styles.container}>
       <Text style={styles.loginTitle}>login</Text>
       
       <TouchableOpacity style={[styles.socialLoginButton, styles.huaweiButton]} onPress={signInWithIdToken}>
@@ -27,7 +27,7 @@ const LoginScreen = () => {
         <Text style={styles.socialLoginButtonText}>huawei id login</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={[styles.socialLoginButton, styles.guestButton]} onPress={signInWithIdToken}>
+      <TouchableOpacity style={[styles.socialLoginButton, styles.guestButton]} onPress={() => navigation.navigate('Guest')}>
         <Image
           style={[styles.socialLoginButtonImage, styles.guestButtonImage]}
           source={require('../../assets/guest_login_icon.png')}
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFF',    
+    backgroundColor: '#FFF'
   },
   loginTitle: {
     marginTop: 75,
