@@ -7,7 +7,8 @@ const screenOptions = {
   headerTransparent: true,
   headerTitleStyle: {
     display: 'none'
-  }
+  },
+  headerLeft: null
 }
 
 const Stack = createStackNavigator();
