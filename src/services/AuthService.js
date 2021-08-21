@@ -1,0 +1,3 @@
+exports.hasUser = () => {
+  return true;
+}
