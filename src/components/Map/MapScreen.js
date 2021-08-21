@@ -1,25 +1,41 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import HMSMap, { MapTypes,HMSMarker } from "@hmscore/react-native-hms-map";
 
 const MapScreen = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Map</Text>
+    <View>
+      <HMSMap
+        mapType={MapTypes.NORMAL}
+        style={{ height: '100%' }}
+        camera={{ target: { latitude: 10, longitude: 55,}, zoom: 11 }}>
+        <HMSMarker
+          coordinate={{ latitude: 57, longitude: 22 }}
+          title="Hello Huawei Map"
+          snippet="This is a snippet!"
+        />
+      </HMSMap>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFF'
+  sectionContainer: {
+    marginTop: 32,
+    paddingHorizontal: 24,
   },
-  title: {
-    fontSize: 36,
-    lineHeight: 40,
-    marginTop: 35,
-    marginBottom: 25
-  }
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+  },
+  sectionDescription: {
+    marginTop: 8,
+    fontSize: 18,
+    fontWeight: '400',
+  },
+  highlight: {
+    fontWeight: '700',
+  },
 });
 
 export default MapScreen;
