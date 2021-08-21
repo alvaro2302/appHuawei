@@ -2,15 +2,20 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import HMSMap, { MapTypes,HMSMarker } from "@hmscore/react-native-hms-map";
 
+const hideLoadingScreen = () => {
+  console.log('MAP LOADING ENDED');
+}
+
 const MapScreen = () => {
   return (
     <View>
       <HMSMap
+        onMapLoaded={hideLoadingScreen}
         mapType={MapTypes.NORMAL}
         style={{ height: '100%' }}
-        camera={{ target: { latitude: 10, longitude: 55,}, zoom: 11 }}>
+        camera={{ target: { latitude: -17.413977, longitude: -66.165321 }, zoom: 12 }}>
         <HMSMarker
-          coordinate={{ latitude: 57, longitude: 22 }}
+          coordinate={{ latitude: -17.413977, longitude: -66.165321 }}
           title="Hello Huawei Map"
           snippet="This is a snippet!"
         />
