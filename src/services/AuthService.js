@@ -1,58 +1,50 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-class AuthService {
-  static instance = new AuthService();
-
-  hasUser = async(key) => {
-
-    try {
-      
-      return await AsyncStorage.getItem(key);
-    } catch (error) {
-      console.log("user not login",error);
-      throw Error(error);
-      
-    }
-  }
-
-  
-
-  signIn = async (key, value) =>{
-    try {
-      await AsyncStorage.setItem(key,value);
-      return true;
-    } catch (error) {
-      console.log("not save token localStorage",error);
-      return false;
-    }
-    
-
-  }
-
-  signOut = async ()=>{
-    try {
-      await AsyncStorage.removeItem("token");
-      return true;
-    } catch (error) {
-      console.log("not sign out", error);
-      return false;
-    }
-
-  }
-
-  getKeys= async()=>{
-    try {
-      return await AsyncStorage.getAllKeys()
-    } catch (error) {
-      console.log("not keyss", error);
-      throw Error(error)
-      
-    }
-  }
-
-  
-
-
+const updateAuth = () => {
+  observers.forEach(callback => {
+    callback();
+  });
 }
-export default AuthService;
 
+exports.hasUser = async () => {
+  try {
+    const token = await AsyncStorage.getItem('token');
+    return token != null;
+  }
+  catch (err) {
+    console.log('user not login', err);
+    throw Error(err);
+  }
+}
+
+exports.signIn = async (token) => {
+  try {
+    await AsyncStorage.setItem('token', token);
+    updateAuth();
+  }
+  catch (err) {
+    console.log('error', err);
+    throw Error(err);
+  }
+}
+
+exports.signOut = async () => {
+  try {
+    await AsyncStorage.removeItem('token');
+    updateAuth();
+  }
+  catch (err) {
+    console.log('error', err);
+    throw Error(err);
+  }
+}
+
+const observers = new Map();
+
+exports.suscribe = (key, method) => {
+  observers.set(key, method);
+}
+
+exports.unsuscribe = (key) => {
+  observers.delete(key);
+}
