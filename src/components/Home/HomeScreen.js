@@ -1,34 +1,21 @@
 import React from 'react';
-import { View, StyleSheet, Text ,TouchableOpacity} from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import AuthService from '../../services/AuthService';
 
-const SignOut = async()=>{
-  const IsSignOut = await AuthService.instance.signOut();
-  if(IsSignOut)
-  {
-    console.log("hizo sign Out")
-  }
-  else
-  {
-    console.log("no hizo sign Out")
-  }
+const SignOut = async () => {
+  await AuthService.signOut();
 }
-
 
 const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Home</Text>
       <TouchableOpacity
-        style={[styles.huaweiButton],[styles.socialLoginButton]}
+        style={[styles.huaweiButton], [styles.socialLoginButton]}
         onPress={SignOut}
-
       >
-        <Text>sign out</Text>
-      </TouchableOpacity> 
-
-     
-
+        <Text>Sign out</Text>
+      </TouchableOpacity>
     </View>
   );
 }

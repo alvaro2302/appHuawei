@@ -15,23 +15,17 @@ const signInWithIdToken = () => {
     authScopeList: [HMSAuthScopeListConstants.EMAIL]
   };
   HMSAccountAuthService.signIn(signInData)
-    .then((response) => { 
-      console.log('Sign In With IdToken -> ', response)
-      SaveTokenLocalStorage(response);
+    .then((response) => {
+      console.log(response);
+      saveTokenLocalStorage(response);
     })
     .catch((err) => { console.log('Sign In With IdToken -> ', err) });
 };
 
-const SaveTokenLocalStorage = async(data)=>{
-  console.log(data)
-  const valueToken = JSON.stringify(data);
-  const key = "token";
-  const result = await AuthService.instance.signIn(key,valueToken);
-  if(result)
-  {
-    console.log("se guardo")
-  }
-
+const saveTokenLocalStorage = async (rawToken) => {
+  console.log(rawToken)
+  const valueToken = JSON.stringify(rawToken);
+  await AuthService.signIn(valueToken);
 }
 
 const LoginScreen = ({navigation}) => {
