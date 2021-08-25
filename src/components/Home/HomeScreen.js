@@ -29,7 +29,9 @@ const HomeScreen = () => {
 
     }
     HMSAccountAuthService.signIn(signInData)
-    .then((response) => { setLoading(false)})
+    .then((response) => { 
+      console.log("sing in succefull")
+      setLoading(false)})
     .catch((err) => { console.log(err) });
   }
 
