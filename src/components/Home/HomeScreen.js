@@ -1,21 +1,60 @@
-import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React,{ useEffect, useState } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity,ActivityIndicator } from 'react-native';
 import AuthService from '../../services/AuthService';
-
+import { HMSAccountAuthService, HMSAuthParamConstants, HMSAuthRequestOptionConstants } from "@hmscore/react-native-hms-account";
 const SignOut = async () => {
-  await AuthService.signOut();
+  HMSAccountAuthService.signOut()
+    .then(async () => { 
+      console.log("signOut -> Success")
+      await AuthService.signOut();
+   })
+    .catch((err) => { console.log(err) });
+  
 }
 
+
+
 const HomeScreen = () => {
+  const [loading, setLoading] = useState(true);
+  useEffect(()=>{
+     SignInHuaweidToken()
+  })
+  
+  let SignInHuaweidToken = async()=>{
+    let datatoken = await AuthService.getToken();
+    let signInData = {
+      accountAuthParams: HMSAuthParamConstants.DEFAULT_AUTH_REQUEST_PARAM,
+      authRequestOption: [datatoken["idToken"],datatoken["accessToken"] 
+      ],    authScopeList: [datatoken["email"]]
+
+    }
+    HMSAccountAuthService.signIn(signInData)
+    .then((response) => { setLoading(false)})
+    .catch((err) => { console.log(err) });
+  }
+
+  
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Home</Text>
-      <TouchableOpacity
-        style={[styles.huaweiButton], [styles.socialLoginButton]}
-        onPress={SignOut}
-      >
-        <Text>Sign out</Text>
-      </TouchableOpacity>
+    <View style={styles.container} >
+
+      { loading?
+      <ActivityIndicator
+               animating = {loading}
+               color = '#bc2b78'
+               size = "large"
+               style = {styles.activityIndicator}/>
+        :(<View style={styles.container}>
+          <Text style={styles.title}>Home</Text>
+            <TouchableOpacity
+              style={[styles.huaweiButton], [styles.socialLoginButton]}
+              onPress={SignOut}>
+              <Text>Sign out</Text>
+            </TouchableOpacity>
+          </View>)
+      }
+      
+      
     </View>
   );
 }
@@ -42,6 +81,12 @@ const styles = StyleSheet.create({
     width: '65%',
     marginBottom: 15
   },
+  activityIndicator: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 80
+ }
 });
 
 export default HomeScreen;
