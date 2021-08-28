@@ -1,62 +1,61 @@
 import React,{ useEffect, useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity,ActivityIndicator } from 'react-native';
 import AuthService from '../../services/AuthService';
-import { HMSAccountAuthService, HMSAuthParamConstants, HMSAuthRequestOptionConstants } from "@hmscore/react-native-hms-account";
+import { HMSAccountAuthService, HMSAuthParamConstants } from "@hmscore/react-native-hms-account";
+
 const SignOut = async () => {
   HMSAccountAuthService.signOut()
-    .then(async () => { 
-      console.log("signOut -> Success")
-      await AuthService.signOut();
-   })
-    .catch((err) => { console.log(err) });
-  
+  .then(async () => { 
+    console.log("signOut -> Success")
+    await AuthService.signOut();
+  })
+  .catch((err) => { console.log(err) });
 }
-
-
 
 const HomeScreen = () => {
   const [loading, setLoading] = useState(true);
-  useEffect(()=>{
-     SignInHuaweidToken()
-  })
   
-  let SignInHuaweidToken = async()=>{
+  useEffect(() => {
+    SignInHuaweidToken()
+  });
+  
+  let SignInHuaweidToken = async() => {
     let datatoken = await AuthService.getToken();
     let signInData = {
       accountAuthParams: HMSAuthParamConstants.DEFAULT_AUTH_REQUEST_PARAM,
-      authRequestOption: [datatoken["idToken"],datatoken["accessToken"] 
-      ],    authScopeList: [datatoken["email"]]
-
+      authRequestOption: [ datatoken["idToken"], datatoken["accessToken"] ],
+      authScopeList: [datatoken["email"]]
     }
     HMSAccountAuthService.signIn(signInData)
     .then((response) => { 
       console.log("sing in succefull")
-      setLoading(false)})
+      setLoading(false)}
+    )
     .catch((err) => { console.log(err) });
   }
 
-  
+  if(loading) {
+    return (
+      <View style={styles.container} >
+        <ActivityIndicator
+          animating = {loading}
+          color = '#bc2b78'
+          size = "large"
+          style = {styles.activityIndicator}
+        />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container} >
-
-      { loading?
-      <ActivityIndicator
-               animating = {loading}
-               color = '#bc2b78'
-               size = "large"
-               style = {styles.activityIndicator}/>
-        :(<View style={styles.container}>
-          <Text style={styles.title}>Home</Text>
-            <TouchableOpacity
-              style={[styles.huaweiButton], [styles.socialLoginButton]}
-              onPress={SignOut}>
-              <Text>Sign out</Text>
-            </TouchableOpacity>
-          </View>)
-      }
-      
-      
+      <Text style={styles.title}>Home</Text>
+      <TouchableOpacity
+        style={[styles.huaweiButton], [styles.socialLoginButton]}
+        onPress={SignOut}
+      >
+        <Text>Sign out</Text>
+      </TouchableOpacity>
     </View>
   );
 }
