@@ -22,7 +22,7 @@ const AuthStack = () => {
     }
   }, []);
 
-  /*if(loading) {
+  if(loading) {
     return (
       <ActivityIndicator
         animating = {loading}
@@ -31,7 +31,7 @@ const AuthStack = () => {
         style = {styles.activityIndicator}
       />
     );
-  }*/
+  }
 
   return (
     (hasUser) ? <HomeStack /> : <LoginStack />
