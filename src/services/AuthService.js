@@ -39,6 +39,16 @@ exports.signOut = async () => {
   }
 }
 
+exports.getToken = async () =>{
+  try {
+    return await AsyncStorage.getItem('token');
+  }
+  catch (err) {
+    console.log('not get token', err);
+    throw Error(err);
+  }
+}
+
 const observers = new Map();
 
 exports.suscribe = (key, method) => {
