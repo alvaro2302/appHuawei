@@ -1,5 +1,5 @@
 import React,{ useEffect, useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity,ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import AuthService from '../../services/AuthService';
 import { HMSAccountAuthService, HMSAuthParamConstants } from "@hmscore/react-native-hms-account";
 
@@ -15,11 +15,7 @@ const SignOut = async () => {
 const HomeScreen = () => {
   const [loading, setLoading] = useState(true);
   
-  useEffect(() => {
-    SignInHuaweidToken()
-  });
-  
-  let SignInHuaweidToken = async() => {
+  const SignInHuaweidToken = async() => {
     let datatoken = await AuthService.getToken();
     let signInData = {
       accountAuthParams: HMSAuthParamConstants.DEFAULT_AUTH_REQUEST_PARAM,
@@ -34,16 +30,18 @@ const HomeScreen = () => {
     .catch((err) => { console.log(err) });
   }
 
+  useEffect(async () => {
+    await SignInHuaweidToken()
+  }, []);
+
   if(loading) {
     return (
-      <View style={styles.container} >
-        <ActivityIndicator
-          animating = {loading}
-          color = '#bc2b78'
-          size = "large"
-          style = {styles.activityIndicator}
-        />
-      </View>
+      <ActivityIndicator
+        animating = {loading}
+        color = '#bc2b78'
+        size = "large"
+        style = {styles.activityIndicator}
+      />
     );
   }
 
@@ -72,7 +70,6 @@ const styles = StyleSheet.create({
     marginBottom: 25
   },
   huaweiButton: {
-    
     backgroundColor: '#DF2A54'
   },
   socialLoginButton: {
