@@ -1,7 +1,13 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
 import HMSAccount, {HMSAuthRequestOptionConstants, HMSAccountAuthService, HMSAuthParamConstants, HMSAuthScopeListConstants, HMSAuthButton} from '@hmscore/react-native-hms-account';
+import AuthService from '../../services/AuthService';
 
+
+state ={
+  token:{}
+
+}
 const signInWithIdToken = () => {
   let signInData = {
     accountAuthParams: HMSAuthParamConstants.DEFAULT_AUTH_REQUEST_PARAM,
@@ -9,9 +15,18 @@ const signInWithIdToken = () => {
     authScopeList: [HMSAuthScopeListConstants.EMAIL]
   };
   HMSAccountAuthService.signIn(signInData)
-    .then((response) => { console.log('Sign In With IdToken -> ', response) })
+    .then((response) => {
+      console.log(response);
+      saveTokenLocalStorage(response);
+    })
     .catch((err) => { console.log('Sign In With IdToken -> ', err) });
 };
+
+const saveTokenLocalStorage = async (rawToken) => {
+  console.log(rawToken)
+  const valueToken = JSON.stringify(rawToken);
+  await AuthService.signIn(valueToken);
+}
 
 const LoginScreen = ({navigation}) => {
   return (

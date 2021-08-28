@@ -44,7 +44,8 @@ const Section = ({children, title}) => {
   );
 };
 
-const App= () =>  {
+
+const App = () =>  {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
