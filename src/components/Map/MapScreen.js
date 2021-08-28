@@ -27,7 +27,7 @@ const MapScreen = () => {
   return (
     <View>
       <HMSMap
-        onMapLoaded={hideLoadingScreen}
+        onMapReady={hideLoadingScreen}
         mapType={MapTypes.NORMAL}
         style={{ height: '100%' }}
         camera={{ target: { latitude: -17.413977, longitude: -66.165321 }, zoom: 12 }}>
