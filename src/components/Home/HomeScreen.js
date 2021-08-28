@@ -13,38 +13,6 @@ const SignOut = async () => {
 }
 
 const HomeScreen = () => {
-  const [loading, setLoading] = useState(true);
-  
-  const SignInHuaweidToken = async() => {
-    let datatoken = await AuthService.getToken();
-    let signInData = {
-      accountAuthParams: HMSAuthParamConstants.DEFAULT_AUTH_REQUEST_PARAM,
-      authRequestOption: [ datatoken["idToken"], datatoken["accessToken"] ],
-      authScopeList: [datatoken["email"]]
-    }
-    HMSAccountAuthService.signIn(signInData)
-    .then((response) => { 
-      console.log("sing in succefull")
-      setLoading(false)}
-    )
-    .catch((err) => { console.log(err) });
-  }
-
-  useEffect(async () => {
-    await SignInHuaweidToken()
-  }, []);
-
-  if(loading) {
-    return (
-      <ActivityIndicator
-        animating = {loading}
-        color = '#bc2b78'
-        size = "large"
-        style = {styles.activityIndicator}
-      />
-    );
-  }
-
   return (
     <View style={styles.container} >
       <Text style={styles.title}>Home</Text>
