@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './HomeScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MapScreen from '../Map/MapScreen';
-
+import ScheduleStack from '../Schedule/ScheduleStack';
 const screenOptions = {
   tabBarShowLabel: false
 }
@@ -24,11 +24,18 @@ const HomeStack = () => {
           return <Icon name='home' size={16} color='#000' color={colorActivateIcon(focused)} />
         }
       }} />
+      <Tab.Screen name ='Schedule' component={ScheduleStack}  options={{
+        tabBarIcon: ({focused}) => {
+          return <Icon name='calendar-sharp' size={16} color='#000'  color={colorActivateIcon(focused)}/>
+        }
+      }}
+      />
       <Tab.Screen name='Map' component={MapScreen} options={{
         tabBarIcon: ({focused}) => {
           return <Icon name='map' size={16} color='#000'  color={colorActivateIcon(focused)}/>
         }
       }} />
+      
     </Tab.Navigator>
   )
 }
