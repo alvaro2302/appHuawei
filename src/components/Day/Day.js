@@ -7,16 +7,16 @@ const Day=({data})=>{
         <View style={styles.days}>
             
             <View style={styles.tarjet}>
-                <Text style={styles.dayName}>Lunes</Text>
+                <Text style={styles.dayName}>{data.day}</Text>
                 <View style={styles.hour}>
                     <Text style={styles.textHour}>Hora:</Text>
-                    <Text style={styles.textHour}>19:00 - 20:00</Text>
+                    <Text style={styles.textHour}>{data.hora}</Text>
                     
                     
                 </View>
                 <View style={styles.transport}>
                     <Text style={styles.textTransport}>Transporte:</Text>
-                    <Text style={styles.textTransport}>130</Text>
+                    <Text style={styles.textTransport}>{data.transporte}</Text>
                     <Icon style={styles.textTransport} name='car-sharp' size={25} color='#000'  color='black'/>
                 </View>
             </View>
@@ -30,8 +30,8 @@ const styles = StyleSheet.create(
         days:{
             marginStart:wp('13.0%'),
             marginLeft:wp('11.7%'),
-            marginTop:hp('3.81%'),
-            marginBottom:hp('3.81%')
+            marginTop:hp('1.23%'),
+            marginBottom:hp('1.23%'),
         },
         tarjet:{
             backgroundColor: 'rgba(255, 99, 71, 0.56)',
