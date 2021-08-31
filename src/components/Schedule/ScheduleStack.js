@@ -1,21 +1,18 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import ScheduleScreen from './ScheduleScreen';
+import { TouchableOpacity,Text,View } from 'react-native';
 
-const screenOptions = {
-  headerTransparent: true,
-  headerTitleStyle: {
-    display: 'none'
-  },
-  headerLeft: null
-}
+
+
+
 
 const Stack = createStackNavigator();
 
 const ScheduleStack = () => {
   return (
-    <Stack.Navigator initialRouteName='ScheduleHome' screenOptions={screenOptions}>
-      <Stack.Screen name='  ' component={ScheduleScreen} />
+    <Stack.Navigator initialRouteName='Scheduless' >
+      <Stack.Screen name='schedule' component={ScheduleScreen}   />
     </Stack.Navigator>
   )
 }

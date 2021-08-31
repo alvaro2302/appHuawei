@@ -1,15 +1,36 @@
 import React,{useState} from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView,Modal } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView,Modal,Header } from 'react-native';
 import Day from '../Day/Day';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
 
-const ScheduleScreen=()=>{
+const ScheduleScreen=({navigation})=>{
     const [modalVisible, setModalVisible] = useState(false);
+
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+        
+          headerRight: () => (
+                <View>
+                    <TouchableOpacity style={styles.buttonAdd} 
+                        onPress={() => setModalVisible(!modalVisible)}
+                        >
+                            <Icon   name='md-add-sharp' size={35} color='#000'  />
+                    </TouchableOpacity>
+                </View>
+          
+           
+          ),
+          
+        });
+      }, [navigation]);
     return (
+       
+        
         <View>
+            
            
             <ScrollView>
                 <Day data={{day:"lunes",hora:"19:00-20:00", transporte:"110"}} ></Day>
@@ -19,13 +40,13 @@ const ScheduleScreen=()=>{
                 <Day data={{day:"lunes",hora:"19:00-20:00", transporte:"110"}} ></Day>
                 <Day data={{day:"lunes",hora:"19:00-20:00", transporte:"110"}} ></Day>
             </ScrollView>
-            <View style={styles.positionAdd}>
+            {/* <View style={styles.positionAdd}>
                 <TouchableOpacity style={styles.buttonAdd} 
                   onPress={() => setModalVisible(!modalVisible)}
                 >
                     <Icon   name='md-add-sharp' size={35} color='#000'  />
                 </TouchableOpacity>
-            </View>
+            </View> */}
             <Modal transparent={true} visible={modalVisible}>
                 <View style={{backgroundColor:'#000000aa',flex:1}}>
                     <View style={styles.formAdd}>
@@ -59,12 +80,11 @@ const styles = StyleSheet.create(
         buttonAdd:{
           
             
-            width:wp('12.5%'),
-            height:hp('5.9%'),
+            width:wp('10.5%'),
+            height:hp('4.9%'),
             backgroundColor:'red',
             borderRadius:(wp('12.5%')+ hp('5.2%'))/2,
-            flex: 1,
-            flexDirection: 'row',
+           
             alignItems: 'center',
             justifyContent:'center'
           
@@ -72,7 +92,7 @@ const styles = StyleSheet.create(
         positionAdd:{
             marginStart:wp('83.2%'),
             marginBottom:hp('9.6%'),
-            marginTop:hp('72%'),
+            marginTop:hp('0%'),
          
             position:'absolute',
            
