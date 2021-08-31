@@ -1,14 +1,16 @@
 import React,{useState} from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView,Modal,Header } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView,Modal,CheckBox } from 'react-native';
 import Day from '../Day/Day';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
 
 const ScheduleScreen=({navigation})=>{
     const [modalVisible, setModalVisible] = useState(false);
-
+    const [radio_props, setRadio_props] = useState({options:[{label: 'alto', value: 0 ,color:'#FF6347'},{label: 'medio', value: 1,color:'#47A7FF' },{label: 'bajo', value: 1,color:'#AA817A' }],value:0,index:0});
+    const [valueOption,setValueOption]= useState({value:0});
     React.useLayoutEffect(() => {
         navigation.setOptions({
         
@@ -25,7 +27,14 @@ const ScheduleScreen=({navigation})=>{
           ),
           
         });
-      }, [navigation]);
+    }, [navigation]);
+    var onPress = (value, index) => {
+        setRadio_props({
+            options:[{label: 'alto', value: 0 ,color:'#FF6347'},{label: 'medio', value: 1,color:'#47A7FF' },{label: 'bajo', value: 1,color:'#AA817A' }],
+            value: value,
+            index: index
+        })
+    }
     return (
        
         
@@ -40,27 +49,75 @@ const ScheduleScreen=({navigation})=>{
                 <Day data={{day:"lunes",hora:"19:00-20:00", transporte:"110"}} ></Day>
                 <Day data={{day:"lunes",hora:"19:00-20:00", transporte:"110"}} ></Day>
             </ScrollView>
-            {/* <View style={styles.positionAdd}>
-                <TouchableOpacity style={styles.buttonAdd} 
-                  onPress={() => setModalVisible(!modalVisible)}
-                >
-                    <Icon   name='md-add-sharp' size={35} color='#000'  />
-                </TouchableOpacity>
-            </View> */}
+            
             <Modal transparent={true} visible={modalVisible}>
                 <View style={{backgroundColor:'#000000aa',flex:1}}>
                     <View style={styles.formAdd}>
-                        <Text style={styles.dayName}></Text>
-                        <View style={styles.hour}>
+                        <View style={styles.dayForm}>
+                        
+                        </View>
+
+                        <View style={styles.hourForm}>
                             <Text style={styles.textHour}>Hora:</Text>
                             <Text style={styles.textHour}></Text>
                             
                             
                         </View>
-                        <View style={styles.transport}>
+
+                        <View style={styles.transpotForm}>
                             <Text style={styles.textTransport}>Transporte:</Text>
                             <Text style={styles.textTransport}></Text>
                             <Icon style={styles.textTransport} name='car' size={25} color='#000'  color='black'/>
+                        </View >
+                            
+                        <View style={styles.colorOptionForm}>
+                            <RadioForm
+                                formHorizontal={true}
+                                
+                                    // radio_props={radio_props}
+                                    
+                                    // initial={0}
+                                    // buttonColor={'#50C900'}
+                                    selectedButtonColor={'blue'}
+                                    initial={0}
+                                    onPress={(value) => {setValueOption({value:value})}}
+                            >
+                                {
+                                   
+                                  radio_props.options.map((obj,i)=>(
+                                   
+                                      <RadioButton labelHorizontal={false} key={i}>
+                                            <RadioButtonInput
+                                                obj={obj}
+                                                index={i}
+                                                isSelected={radio_props.index === i}
+                                                onPress={(obj,i)=> {onPress(obj.value,i)}}
+                                                borderWidth={0.5}
+                                                buttonInnerColor={'black'}
+                                                buttonOuterColor={radio_props.value === i ? 'red' : 'black'}
+                                                buttonSize={10}
+                                                buttonOuterSize={30}
+                                                buttonStyle={{
+                                                    backgroundColor:obj.color
+                                                }}
+                                                buttonWrapStyle={{marginLeft: 1}}
+                                                
+
+                                            />
+                                            <RadioButtonLabel
+                                            
+                                                obj={obj}
+                                                index={i}
+                                                labelHorizontal={true}
+                                                onPress={(obj,i)=> {onPress(obj.value,i)}}
+                                                labelStyle={{fontSize: 10, color: 'black'}}
+                                                labelWrapStyle={{}}
+                                            />
+                                      </RadioButton>
+                                  ))   
+                                }
+
+                            </RadioForm>
                         </View>
                         <TouchableOpacity style={{ marginStart:'11.7%',width:70,height:40, backgroundColor:'green',borderRadius:15}} 
                         onPress={() => setModalVisible(!modalVisible)}
@@ -89,14 +146,7 @@ const styles = StyleSheet.create(
             justifyContent:'center'
           
         },
-        positionAdd:{
-            marginStart:wp('83.2%'),
-            marginBottom:hp('9.6%'),
-            marginTop:hp('0%'),
-         
-            position:'absolute',
-           
-        },
+        
         formAdd:{
             backgroundColor:'white',
             margin:wp('9%'),
@@ -143,6 +193,37 @@ const styles = StyleSheet.create(
             marginTop:hp('1.23%'),
             marginBottom:hp('2.2%'),
             fontWeight: 'bold'
+        },
+        dayForm:{
+            backgroundColor: '#D4D4D4',
+            marginStart:'11.7%',
+            marginTop:hp('1.7%'),
+            height:hp('5.1%'),
+            width:wp('22.%'),
+            borderRadius:15,
+            marginBottom:hp('1.8%'),
+            flexDirection:'row'
+        },
+        hourForm:{
+            backgroundColor: '#D4D4D4',
+            marginStart:'11.7%',
+            height:hp('7.2%'),
+            width:wp('68.5%'),
+            borderRadius:15,
+            marginBottom:hp('1.8%'),
+            flexDirection:'row'
+        },
+        transpotForm:{
+            backgroundColor: '#D4D4D4',
+            marginStart:'11.7%',
+            height:hp('7.2%'),
+            width:wp('62.6%'),
+            borderRadius:15,
+            marginBottom:hp('1.8%'),
+            flexDirection:'row'
+        },
+        colorOptionForm:{
+            marginStart:'11.7%',
         }
     }
 
