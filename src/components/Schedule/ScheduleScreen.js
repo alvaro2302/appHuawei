@@ -96,7 +96,7 @@ const ScheduleScreen=({navigation})=>{
                                                 buttonInnerColor={'black'}
                                                 buttonOuterColor={radio_props.value === i ? 'red' : 'black'}
                                                 buttonSize={10}
-                                                buttonOuterSize={30}
+                                                buttonOuterSize={35}
                                                 buttonStyle={{
                                                     backgroundColor:obj.color
                                                 }}
@@ -118,12 +118,20 @@ const ScheduleScreen=({navigation})=>{
                                 }
 
                             </RadioForm>
+                        </View >
+                        <View style={styles.confirmForm}>
+                            <TouchableOpacity style={styles.buttonConfirm} 
+                                                        onPress={() => setModalVisible(!modalVisible)}>
+                                <Text style={styles.textColorButtonsConfirm}>aceptar</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.buttonCancel} 
+                            onPress={() => setModalVisible(!modalVisible)}>
+                                <Text style={styles.textColorButtonsConfirm}>cancelar</Text>
+                            </TouchableOpacity>
+
                         </View>
-                        <TouchableOpacity style={{ marginStart:'11.7%',width:70,height:40, backgroundColor:'green',borderRadius:15}} 
-                        onPress={() => setModalVisible(!modalVisible)}
-                        >
-                            <Text>aceptar</Text>
-                        </TouchableOpacity>
+                       
                     </View>
                     
                 </View>
@@ -224,7 +232,41 @@ const styles = StyleSheet.create(
         },
         colorOptionForm:{
             marginStart:'11.7%',
+            marginTop:hp('1.84%'),
+            marginBottom:hp('1.84%'),
+        },
+        confirmForm:{
+            flexDirection:'row',
+            marginStart:wp('8.8%'),
+            marginLeft:wp('8.8%')
+        },
+        buttonConfirm:{ 
+            marginStart:'11.7%',
+            width:wp('21.3'),
+            height:hp('4.8%'), 
+            backgroundColor:'#40CA4E',
+            borderRadius:15,
+            alignItems: 'center',
+            justifyContent:'center',
+            
+           
+        },
+        buttonCancel:{
+            marginStart:wp('5.3%'),
+            marginLeft:wp('9.3%'),
+            width:wp('21.3'),
+            height:hp('4.8%'), 
+            backgroundColor:'#E72020',
+            borderRadius:15,
+            alignItems: 'center',
+            justifyContent:'center',
+            
+        },
+        textColorButtonsConfirm:{
+            color:'white',
+            fontWeight:'normal'
         }
+        
     }
 
 )
