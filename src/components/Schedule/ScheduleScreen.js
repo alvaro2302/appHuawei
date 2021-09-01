@@ -5,12 +5,16 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nati
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import {Picker} from '@react-native-picker/picker';
 
 
 const ScheduleScreen=({navigation})=>{
     const [modalVisible, setModalVisible] = useState(false);
     const [radio_props, setRadio_props] = useState({options:[{label: 'alto', value: 0 ,color:'#FF6347'},{label: 'medio', value: 1,color:'#47A7FF' },{label: 'bajo', value: 1,color:'#AA817A' }],value:0,index:0});
     const [valueOption,setValueOption]= useState({value:0});
+    const [selectedLanguage, setSelectedLanguage] = useState();
+    const [daysWeek, setDaysWeek]= useState({days:[{id:"1",value:"Lunes"},{id:"2",value:"Martes"},{id:"3",value:"Miercoles"},{id:"4",value:"Jueves"},{id:"5",value:"Viernes"},{id:"6",value:"Sabado"},{id:"7",value:"Domingo"} ]});
+
     React.useLayoutEffect(() => {
         navigation.setOptions({
         
@@ -54,7 +58,20 @@ const ScheduleScreen=({navigation})=>{
                 <View style={{backgroundColor:'#000000aa',flex:1}}>
                     <View style={styles.formAdd}>
                         <View style={styles.dayForm}>
-                        
+                            <Picker
+                                
+                                selectedValue={selectedLanguage}
+                                onValueChange={(itemValue, itemIndex) =>
+                                    setSelectedLanguage(itemValue)
+                                }>
+                                {
+                                    daysWeek.days.map((day)=>(
+                                        <Picker.Item label= {day.value} value={day.value} key={day.id} />
+                                    ))
+                                }
+                                {/* <Picker.Item label="Lunes" value="java" />
+                                <Picker.Item label="martes" value="js" /> */}
+                            </Picker>
                         </View>
 
                         <View style={styles.hourForm}>
@@ -207,10 +224,10 @@ const styles = StyleSheet.create(
             marginStart:'11.7%',
             marginTop:hp('1.7%'),
             height:hp('5.1%'),
-            width:wp('22.%'),
+            width:wp('38%'),
             borderRadius:15,
             marginBottom:hp('1.8%'),
-            flexDirection:'row'
+            flexDirection:'column'
         },
         hourForm:{
             backgroundColor: '#D4D4D4',
