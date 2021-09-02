@@ -48,6 +48,51 @@ exports.getToken = async () =>{
     throw Error(err);
   }
 }
+exports.getkeys = async() =>{
+  try {
+    return await AsyncStorage.getAllKeys();
+  }
+  catch (err) {
+    console.log('not get all keys', err);
+    throw Error(err);
+  }
+}
+exports.addDay = async(token, data)=>{
+  try {
+    await AsyncStorage.setItem(token, data);
+  }
+  catch (err) {
+    console.log('error', err);
+    throw Error(err);
+  }
+}
+exports.getDay = async(token)=>{
+  try {
+    return await AsyncStorage.getItem(token);
+  }
+  catch (err) {
+    console.log('not get token', err);
+    throw Error(err);
+  }
+}
+exports.deleteDay = async(token)=>{
+  try {
+    await AsyncStorage.removeItem(token);
+  }
+  catch (err) {
+    console.log('not eliminate token', err);
+    throw Error(err);
+  }
+}
+exports.multiGet=async(keys)=>{
+  try {
+     return await AsyncStorage.multiGet(keys)
+  }
+  catch (err) {
+    console.log('not get keys', err);
+    throw Error(err);
+  }
+}
 
 const observers = new Map();
 
