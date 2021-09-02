@@ -222,7 +222,7 @@ const ScheduleScreen=({navigation})=>{
                 <Day data={{day:"lunes",hora:"19:00-20:00", transporte:"110"}} ></Day>
                 <Day data={{day:"lunes",hora:"19:00-20:00", transporte:"110"}} ></Day>
                 <Day data={{day:"lunes",hora:"19:00-20:00", transporte:"110"}} ></Day> */}
-                <ScrollView>
+        
                     {Days.length === 0?(
                         <Text>Todavia no hay dias</Text>
                     ):(
@@ -234,7 +234,7 @@ const ScheduleScreen=({navigation})=>{
                     )
 
                     }
-                </ScrollView>
+           
               
             </View>
             
@@ -502,7 +502,7 @@ const styles = StyleSheet.create(
             flexDirection:'row',
             marginStart:wp('8.8%'),
             marginLeft:wp('8.8%'),
-            marginTop:hp('1.2%')
+            marginTop:hp('-2.0%')
         },
         buttonConfirm:{ 
             marginStart:'11.7%',
