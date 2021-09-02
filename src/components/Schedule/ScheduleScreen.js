@@ -1,5 +1,5 @@
-import React,{useState} from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView,Modal,CheckBox,TextInput } from 'react-native';
+import React,{useState,useEffect} from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView,Modal,CheckBox,TextInput, FlatList, SafeAreaView } from 'react-native';
 import Day from '../Day/Day';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
@@ -7,7 +7,7 @@ import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import AuthService from '../../services/AuthService';
 
 const ScheduleScreen=({navigation})=>{
     const [modalVisible, setModalVisible] = useState(false);
@@ -26,6 +26,8 @@ const ScheduleScreen=({navigation})=>{
     const [show, setShow] = useState(false);
     const [showFinalTime, setShowFinalTime] = useState(false);
     const [messageError,setMessageError] = useState('');
+    const [Days, setDays]= useState([]);
+
     React.useLayoutEffect(() => {
         navigation.setOptions({
         
@@ -146,9 +148,31 @@ const ScheduleScreen=({navigation})=>{
             return false;
         }
     }
+    const updateDaysData = async()=>{
 
-    const addToSchedule=()=>{
+        try {
+
+            let listKeys = await AuthService.getkeys(); 
+
+            let listkeysDays = listKeys.filter((key)=> key != 'token' && key != 'Parse/yagl2Yo3F2OjpvdfK6sgDUlRhruxAvpMHa9HdQBO/installationId');
+            
+            
+            let days = await AuthService.multiGet(listkeysDays);
+            let daysObjects = days.map((day)=> JSON.parse(day[1]));
+            setDays(daysObjects);
+            
+                
+        } catch (error) {
+            console.log(error)
+        }
+        
+
+    }
+
+   
+    const addToSchedule= async() =>{
         let dayForm = selectedDay;
+        
         let hourInitialForm = hourInitial;
         let houhourFinalForm = hourFinal;
         let nameTransportForm = nameTransport;
@@ -156,7 +180,15 @@ const ScheduleScreen=({navigation})=>{
         let optionColorForm =radio_props.options[index];  
         if(validateForm(dayForm,hourInitialForm,houhourFinalForm,nameTransportForm,optionColorForm.color))
         {
+            let token = new Date().toLocaleString();
+            let dayFormCompleto= { id:token,day: dayForm,hora: hourInitialForm + '-' + houhourFinalForm,transporte:nameTransportForm,color:optionColorForm.color}
+            const valueToken = JSON.stringify(dayFormCompleto);
             
+            await AuthService.addDay(token,valueToken);
+           
+           
+
+            await updateDaysData();
             setModalVisible(!modalVisible)
         }
         else
@@ -165,6 +197,17 @@ const ScheduleScreen=({navigation})=>{
         }
         
     }
+    const renderItem = ({ item }) => (
+
+        <Day data={item}></Day>
+    )
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+          updateDaysData();
+        });
+        return unsubscribe;
+      }, [navigation]);
 
     return (
        
@@ -172,14 +215,28 @@ const ScheduleScreen=({navigation})=>{
         <View>
             
            
-            <ScrollView>
+            <View>
+                {/* /* <Day data={{day:"lunes",hora:"19:00-20:00", transporte:"110"}} ></Day>
                 <Day data={{day:"lunes",hora:"19:00-20:00", transporte:"110"}} ></Day>
                 <Day data={{day:"lunes",hora:"19:00-20:00", transporte:"110"}} ></Day>
                 <Day data={{day:"lunes",hora:"19:00-20:00", transporte:"110"}} ></Day>
                 <Day data={{day:"lunes",hora:"19:00-20:00", transporte:"110"}} ></Day>
-                <Day data={{day:"lunes",hora:"19:00-20:00", transporte:"110"}} ></Day>
-                <Day data={{day:"lunes",hora:"19:00-20:00", transporte:"110"}} ></Day>
-            </ScrollView>
+                <Day data={{day:"lunes",hora:"19:00-20:00", transporte:"110"}} ></Day> */}
+                <ScrollView>
+                    {Days.length === 0?(
+                        <Text>Todavia no hay dias</Text>
+                    ):(
+                        <FlatList
+                        data={Days}
+                        renderItem={renderItem}
+                        keyExtractor={item => item.id}
+                        />
+                    )
+
+                    }
+                </ScrollView>
+              
+            </View>
             
             <Modal transparent={true} visible={modalVisible}>
                 <View style={{backgroundColor:'#000000aa',flex:1, justifyContent:'center',}}>
