@@ -501,7 +501,8 @@ const styles = StyleSheet.create(
         confirmForm:{
             flexDirection:'row',
             marginStart:wp('8.8%'),
-            marginLeft:wp('8.8%')
+            marginLeft:wp('8.8%'),
+            marginTop:hp('1.8%')
         },
         buttonConfirm:{ 
             marginStart:'11.7%',
@@ -538,6 +539,7 @@ const styles = StyleSheet.create(
             marginBottom:hp('1.2%'),
             borderRadius:15,
             color:'white',
+            
         },
         formHours:{
             marginStart:wp('2.6%'),
