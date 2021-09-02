@@ -502,7 +502,7 @@ const styles = StyleSheet.create(
             flexDirection:'row',
             marginStart:wp('8.8%'),
             marginLeft:wp('8.8%'),
-            marginTop:hp('1.8%')
+            marginTop:hp('1.2%')
         },
         buttonConfirm:{ 
             marginStart:'11.7%',
