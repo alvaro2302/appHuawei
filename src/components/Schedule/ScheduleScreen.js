@@ -511,7 +511,7 @@ const styles = StyleSheet.create(
             borderRadius:15,
             alignItems: 'center',
             justifyContent:'center',
-            
+            marginBottom:hp('1.2%')
            
         },
         buttonCancel:{
@@ -523,6 +523,7 @@ const styles = StyleSheet.create(
             borderRadius:15,
             alignItems: 'center',
             justifyContent:'center',
+            marginBottom:hp('1.2%')
             
         },
         textColorButtonsConfirm:{
