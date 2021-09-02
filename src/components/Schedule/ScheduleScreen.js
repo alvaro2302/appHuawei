@@ -1,19 +1,29 @@
 import React,{useState} from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView,Modal,CheckBox } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView,Modal,CheckBox,TextInput } from 'react-native';
 import Day from '../Day/Day';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Picker} from '@react-native-picker/picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 const ScheduleScreen=({navigation})=>{
     const [modalVisible, setModalVisible] = useState(false);
     const [radio_props, setRadio_props] = useState({options:[{label: 'alto', value: 0 ,color:'#FF6347'},{label: 'medio', value: 1,color:'#47A7FF' },{label: 'bajo', value: 1,color:'#AA817A' }],value:0,index:0});
     const [valueOption,setValueOption]= useState({value:0});
-    const [selectedLanguage, setSelectedLanguage] = useState();
+    const [selectedDay, setSelectedDay] = useState();
     const [daysWeek, setDaysWeek]= useState({days:[{id:"1",value:"Lunes"},{id:"2",value:"Martes"},{id:"3",value:"Miercoles"},{id:"4",value:"Jueves"},{id:"5",value:"Viernes"},{id:"6",value:"Sabado"},{id:"7",value:"Domingo"} ]});
+    const [nameTransport, setNameTransport] = useState("");
+    const [hourInitial, setHourInitial] = useState("inicial");
+    const [hourFinal, setHourFinal] = useState("Final"); 
+    const [date, setDate] = useState(new Date());
+    const [dateFinal, setDateFinal] = useState(new Date())
+    const [mode, setMode] = useState('date');
+    const [modeFinal, setModeFinal] = useState('date');
+    const [show, setShow] = useState(false);
+    const [showFinalTime, setShowFinalTime] = useState(false);
 
     React.useLayoutEffect(() => {
         navigation.setOptions({
@@ -39,6 +49,51 @@ const ScheduleScreen=({navigation})=>{
             index: index
         })
     }
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShow(Platform.OS === 'ios');
+        setDate(currentDate);
+        let tempDate = new Date(currentDate);
+        let minutos = minutosFormateados(tempDate.getMinutes());
+        let timeInitial = tempDate.getHours()+':'+ minutos;
+        setHourInitial(timeInitial);
+    };
+
+    const showMode= (currentMode)=>{
+        setShow(true);
+        setMode(currentMode);
+
+    }
+    const minutosFormateados=(minutos)=>{
+        if(minutos === 0)
+        {
+            return '00';
+        }
+        if(minutos <10)
+        {
+            return '0'+ minutos;
+        }
+        else
+        {
+            return minutos;
+        }
+
+    }
+    const onChangeHourFinal = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShowFinalTime(Platform.OS === 'ios');
+        setDateFinal(currentDate);
+        let tempDate = new Date(currentDate);
+        let minutos = minutosFormateados(tempDate.getMinutes());
+        let timeFinal = tempDate.getHours()+':'+minutos;
+        setHourFinal(timeFinal);
+    };
+    const showModeFinalTime= (currentMode)=>{
+        setShowFinalTime(true)
+        setModeFinal(currentMode);
+
+    }
+
     return (
        
         
@@ -60,9 +115,9 @@ const ScheduleScreen=({navigation})=>{
                         <View style={styles.dayForm}>
                             <Picker
                                 
-                                selectedValue={selectedLanguage}
+                                selectedValue={selectedDay}
                                 onValueChange={(itemValue, itemIndex) =>
-                                    setSelectedLanguage(itemValue)
+                                    setSelectedDay(itemValue)
                                 }>
                                 {
                                     daysWeek.days.map((day)=>(
@@ -72,18 +127,57 @@ const ScheduleScreen=({navigation})=>{
                                 {/* <Picker.Item label="Lunes" value="java" />
                                 <Picker.Item label="martes" value="js" /> */}
                             </Picker>
+                           
                         </View>
 
                         <View style={styles.hourForm}>
                             <Text style={styles.textHour}>Hora:</Text>
-                            <Text style={styles.textHour}></Text>
-                            
+                            <TouchableOpacity style={styles.formHours}
+                                onPress={()=> showMode('time')}
+                            >
+                                <Text style={styles.textHolderHour}>{hourInitial}</Text>
+                            </TouchableOpacity>
+                             <Text style={{alignSelf:'center'}}>-</Text>
+                            <TouchableOpacity style={styles.formHours}
+                                onPress={()=> showModeFinalTime('time')}
+                            >
+                                <Text style={styles.textHolderHour}>{hourFinal}</Text>
+                            </TouchableOpacity>
+                            {show && (
+                                <DateTimePicker
+                                testID="dateTimePicker"
+                                value={date}
+                                mode={mode}
+                                is24Hour={true}
+                                display="default"
+                                onChange={onChange}
+                                />
+                            )}
+
+                            {showFinalTime && (
+                                <DateTimePicker
+                                testID="dateTimePicker"
+                                value={dateFinal}
+                                mode={modeFinal}
+                                is24Hour={true}
+                                display="default"
+                                onChange={onChangeHourFinal}
+                                />
+                            )}
                             
                         </View>
 
                         <View style={styles.transpotForm}>
                             <Text style={styles.textTransport}>Transporte:</Text>
-                            <Text style={styles.textTransport}></Text>
+                            
+                            <TextInput style={styles.nameTransport}
+                                placeholder="nombre"
+                                placeholderTextColor="#D4D4D4"
+                                inputStyle={{color: 'red'}} 
+                                maxLength={5}
+                                onChangeText={setNameTransport}
+                            />
+                          
                             <Icon style={styles.textTransport} name='car' size={25} color='#000'  color='black'/>
                         </View >
                             
@@ -135,6 +229,7 @@ const ScheduleScreen=({navigation})=>{
                                 }
 
                             </RadioForm>
+                           
                         </View >
                         <View style={styles.confirmForm}>
                             <TouchableOpacity style={styles.buttonConfirm} 
@@ -282,6 +377,31 @@ const styles = StyleSheet.create(
         textColorButtonsConfirm:{
             color:'white',
             fontWeight:'normal'
+        },
+        nameTransport:{
+            backgroundColor:'black',
+            marginStart:wp('2.6%'),
+            marginRight:wp('2.6%'),
+            marginTop:hp('1.2%'),
+            marginBottom:hp('1.2%'),
+            borderRadius:15,
+            color:'white',
+        },
+        formHours:{
+            marginStart:wp('2.6%'),
+            marginRight:wp('2.6%'),
+            marginTop:hp('1.2%'),
+            marginBottom:hp('1.2%'),
+            width:wp('21.3%'),
+            height:hp('4.8%'),
+            backgroundColor:'black',
+            borderRadius:15,
+            alignItems: 'center',
+            justifyContent:'center',
+        },
+        textHolderHour:{
+            color:'#D4D4D4',
+            
         }
         
     }
