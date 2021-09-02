@@ -11,6 +11,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 const ScheduleScreen=({navigation})=>{
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalErrorVisible,setModalErrorVisible] = useState (false);
     const [radio_props, setRadio_props] = useState({options:[{label: 'alto', value: 0 ,color:'#FF6347'},{label: 'medio', value: 1,color:'#47A7FF' },{label: 'bajo', value: 1,color:'#AA817A' }],value:0,index:0});
     const [valueOption,setValueOption]= useState({value:0});
     const [selectedDay, setSelectedDay] = useState();
@@ -24,7 +25,7 @@ const ScheduleScreen=({navigation})=>{
     const [modeFinal, setModeFinal] = useState('date');
     const [show, setShow] = useState(false);
     const [showFinalTime, setShowFinalTime] = useState(false);
-
+    const [messageError,setMessageError] = useState('');
     React.useLayoutEffect(() => {
         navigation.setOptions({
         
@@ -93,6 +94,77 @@ const ScheduleScreen=({navigation})=>{
         setModeFinal(currentMode);
 
     }
+    const validateTimeInitialAndFinal=(initial , final)=>{
+        let timeInitial = initial.split(":");
+        let hourInitial = timeInitial[0];
+        let minuteInitial = timeInitial[1];
+        let timeFinal = final.split(":");
+        let hourFinal = timeFinal[0];
+        let minuteFinal = timeFinal[1];
+        let isValidateTime = false;
+        if((hourInitial > 0 && hourInitial <= 12  && hourFinal > 0 && hourFinal <= 12) || ((hourInitial > 12 || hourInitial === 0) && hourInitial <= 23  && (hourFinal > 12 || hourFinal === 0 ) && hourFinal <= 23) )
+        {
+            if(hourFinal > hourInitial)
+            {
+                isValidateTime = true
+            }
+        }
+        return isValidateTime;
+    }
+    const validateForm = (day, hourInitial,houtFinal,nameTransport, color)=>{
+
+        let messageError = ''
+        if(day && validateTimeInitialAndFinal(hourInitial,houtFinal) && nameTransport && color )
+        { 
+
+            return true
+
+        }
+        else
+        {
+            if(!day)
+            {
+                messageError = messageError + '- Falta el dia seleccionado' + '\n';
+
+            }
+            
+            if(!validateTimeInitialAndFinal(hourInitial,houtFinal))
+            {
+                messageError = messageError + '- El formato de la hora debe ser el mismo o la hora final debe ser menor'+'\n';
+
+            }
+            if(!nameTransport)
+            {
+                messageError = messageError + '- El nombre debe  añadirse '+'\n';
+            }
+
+            if(!color)
+            {
+                messageError = messageError + '- El color debe elegirse' +'\n';
+            }
+            setMessageError(messageError);
+            return false;
+        }
+    }
+
+    const addToSchedule=()=>{
+        let dayForm = selectedDay;
+        let hourInitialForm = hourInitial;
+        let houhourFinalForm = hourFinal;
+        let nameTransportForm = nameTransport;
+        let index = radio_props.index;
+        let optionColorForm =radio_props.options[index];  
+        if(validateForm(dayForm,hourInitialForm,houhourFinalForm,nameTransportForm,optionColorForm.color))
+        {
+            
+            setModalVisible(!modalVisible)
+        }
+        else
+        {
+            setModalErrorVisible(!modalErrorVisible);
+        }
+        
+    }
 
     return (
        
@@ -110,7 +182,7 @@ const ScheduleScreen=({navigation})=>{
             </ScrollView>
             
             <Modal transparent={true} visible={modalVisible}>
-                <View style={{backgroundColor:'#000000aa',flex:1}}>
+                <View style={{backgroundColor:'#000000aa',flex:1, justifyContent:'center',}}>
                     <View style={styles.formAdd}>
                         <View style={styles.dayForm}>
                             <Picker
@@ -175,6 +247,7 @@ const ScheduleScreen=({navigation})=>{
                                 placeholderTextColor="#D4D4D4"
                                 inputStyle={{color: 'red'}} 
                                 maxLength={5}
+                                value={nameTransport}
                                 onChangeText={setNameTransport}
                             />
                           
@@ -233,7 +306,7 @@ const ScheduleScreen=({navigation})=>{
                         </View >
                         <View style={styles.confirmForm}>
                             <TouchableOpacity style={styles.buttonConfirm} 
-                                                        onPress={() => setModalVisible(!modalVisible)}>
+                                                        onPress={() => addToSchedule()}>
                                 <Text style={styles.textColorButtonsConfirm}>aceptar</Text>
                             </TouchableOpacity>
 
@@ -247,6 +320,18 @@ const ScheduleScreen=({navigation})=>{
                     </View>
                     
                 </View>
+            </Modal>
+
+            <Modal transparent={true} visible={modalErrorVisible}>
+                <View style={{backgroundColor:'#000000aa',flex:1, justifyContent:'center',}}>   
+                    <View style={styles.formError}>
+                        <Text style={styles.textErrorModal}>{messageError}</Text>
+                        <TouchableOpacity style={styles.buttonAceptModalError} 
+                            onPress={() => setModalErrorVisible(!modalErrorVisible)}>
+                              <Text style={styles.textColorButtonsConfirm}>Aceptar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>         
             </Modal>
         </View>
     );
@@ -270,13 +355,22 @@ const styles = StyleSheet.create(
         formAdd:{
             backgroundColor:'white',
             margin:wp('9%'),
-            marginTop:hp('13.9%'),
-            marginBottom:hp('41.6%'),
+           
             borderRadius:15,
             width:wp('81%'),
             height:hp('44.5%'),
             flexDirection:'column'
             
+        },
+        formError:{
+            backgroundColor:'white',
+            margin:wp('9%'),
+            alignSelf:'center',
+            borderRadius:15,
+            width:wp('70%'),
+            height:hp('24.5%'),
+            flexDirection:'column',
+            justifyContent:'center',
         },
         dayName:{
             marginStart:wp('8.8%'),
@@ -402,7 +496,23 @@ const styles = StyleSheet.create(
         textHolderHour:{
             color:'#D4D4D4',
             
-        }
+        },
+        textErrorModal:{
+            marginStart:wp('2.14'),
+            marginRight:wp('2.14')
+
+        },
+        buttonAceptModalError:{
+            
+            width:wp('21.3'),
+            height:hp('4.8%'), 
+            backgroundColor:'#E72020',
+            borderRadius:15,
+            alignSelf:'center',
+            alignItems: 'center',
+            justifyContent:'center',
+            
+        },
         
     }
 
