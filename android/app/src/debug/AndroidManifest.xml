@@ -8,6 +8,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="28"
         tools:ignore="GoogleAppIndexingWarning">
+        <receiver android:name="com.huawei.hms.rn.push.receiver.HmsLocalNotificationActionsReceiver" />
+            <receiver android:name="com.huawei.hms.rn.push.receiver.HmsLocalNotificationBootEventReceiver">
+            <intent-filter>
+            <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.huawei.hms.rn.push.receiver.HmsLocalNotificationScheduledPublisher" 
+                    android:enabled="true"
+                    android:exported="true">
+        </receiver>
+
         <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
     </application>
 </manifest>
