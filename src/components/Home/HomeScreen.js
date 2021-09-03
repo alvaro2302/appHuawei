@@ -1,9 +1,8 @@
 import React,{ useEffect, useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import AuthService from '../../services/AuthService';
-import { HMSAccountAuthService, HMSAuthParamConstants } from "@hmscore/react-native-hms-account";
 import { HmsLocalNotification,HmsPushResultCode } from'@hmscore/react-native-hms-push';
-
+import{ HmsPushInstanceId }from "@hmscore/react-native-hms-push";
 const SignOut =  () => {
   HMSAccountAuthService.signOut()
   .then(async () => { 
@@ -13,7 +12,9 @@ const SignOut =  () => {
   .catch((err) => { console.log(err) });
 }
 
-const Notification= async()=>{
+const Notification= ()=>{
+  
+
   HmsLocalNotification.localNotificationSchedule({
     [HmsLocalNotification.Attr.title]: 'Notification Title',
     [HmsLocalNotification.Attr.message]: 'Notification Message', // (required)
@@ -34,7 +35,7 @@ const Notification= async()=>{
     [HmsLocalNotification.Attr.fireDate]: new Date(Date.now() + 60 * 1000).getTime(), // in 1 min
     })
     .then((result) => {
-      this.log("LocalNotification Default", result);
+      console.log("LocalNotification Default", result);
     })
     .catch((err) => {
       alert(
