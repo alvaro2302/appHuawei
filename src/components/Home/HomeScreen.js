@@ -5,6 +5,7 @@ import { HmsLocalNotification,HmsPushResultCode } from'@hmscore/react-native-hms
 import{ HmsPushInstanceId }from "@hmscore/react-native-hms-push";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import HMSLocation from '@hmscore/react-native-hms-location';
+import LocationService from '../../services/LocationService';
 
 
 const SignOut =  () => {
@@ -50,9 +51,17 @@ const Notification= ()=>{
 
 const HomeScreen = () => {
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => {
+ 
+  const addLocation = async(location)=>{
+    console.log("locationn")
+    // console.log(location.longitude);
+    // console.log(location.latitude);
+    await LocationService.addLocation(location);
+
+  }
 
 
+  const toggleSwitch = async() => {
 
     const locationRequest = {
       priority: HMSLocation.FusedLocation.Native.PriorityConstants.PRIORITY_HIGH_ACCURACY,
@@ -81,9 +90,12 @@ const HomeScreen = () => {
         
         console.log("Location setting result:", JSON.stringify(res, null, 2))
         HMSLocation.FusedLocation.Native.getLastLocation()
-        .then(pos => {
+        .then(async function(pos)  {
+          let location = pos;
+          await addLocation(location);
+          console.log("Last location:", JSON.stringify(pos, null, 2));
           setIsEnabled(previousState =>!previousState);
-          console.log("Last location:", JSON.stringify(pos, null, 2))
+         
         })      
         .catch(err => {
           console.log('Failed to get last location', err)
