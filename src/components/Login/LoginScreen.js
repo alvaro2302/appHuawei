@@ -9,21 +9,39 @@ state ={
 
 }
 const signInWithIdToken = () => {
-  let signInData = {
+  const signInData = {
     accountAuthParams: HMSAuthParamConstants.DEFAULT_AUTH_REQUEST_PARAM,
     authRequestOption: [HMSAuthRequestOptionConstants.ID_TOKEN, HMSAuthRequestOptionConstants.ACCESS_TOKEN],
     authScopeList: [HMSAuthScopeListConstants.EMAIL]
   };
   HMSAccountAuthService.signIn(signInData)
-    .then((response) => {
-      console.log(response);
-      saveTokenLocalStorage(response);
-    })
-    .catch((err) => { console.log('Sign In With IdToken -> ', err) });
+  .then((response) => {
+    console.log(response);
+    saveTokenLocalStorage(response);
+  })
+  .catch((err) => { console.log('Sign In With IdToken -> ', err) });
 };
 
+const silentSignIn = () => {
+  const silentSignInData = {
+    accountAuthParams: HMSAuthParamConstants.DEFAULT_AUTH_REQUEST_PARAM
+  };
+  HMSAccountAuthService.silentSignIn(silentSignInData)
+  .then((response) => {
+    console.log(response);
+    saveTokenLocalStorage(response);
+  })
+  .catch((err) => {
+    if(err.code == 2002) {
+      signInWithIdToken();
+    }
+    else {
+      console.log('Sign In With IdToken -> ', err)
+    }
+  });
+}
+
 const saveTokenLocalStorage = async (rawToken) => {
-  console.log(rawToken)
   const valueToken = JSON.stringify(rawToken);
   await AuthService.signIn(valueToken);
 }
@@ -33,7 +51,7 @@ const LoginScreen = ({navigation}) => {
     <View style={styles.container}>
       <Text style={styles.loginTitle}>login</Text>
       
-      <TouchableOpacity style={[styles.socialLoginButton, styles.huaweiButton]} onPress={signInWithIdToken}>
+      <TouchableOpacity style={[styles.socialLoginButton, styles.huaweiButton]} onPress={silentSignIn}>
         <Image
           style={[styles.socialLoginButtonImage, styles.huaweiButtonImage]}
           source={require('../../assets/huawei_login_icon.png')}

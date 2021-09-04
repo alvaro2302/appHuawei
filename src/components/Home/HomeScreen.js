@@ -6,20 +6,22 @@ import{ HmsPushInstanceId }from "@hmscore/react-native-hms-push";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import HMSLocation from '@hmscore/react-native-hms-location';
 import LocationService from '../../services/LocationService';
-
+import { HMSAccountAuthService } from '@hmscore/react-native-hms-account';
 
 const SignOut =  () => {
   HMSAccountAuthService.signOut()
-  .then(async () => { 
+  .then(async () => {
     console.log("signOut -> Success")
     await AuthService.signOut();
   })
-  .catch((err) => { console.log(err) });
+  .catch(async (err) => {
+    if(err.code == 3001) {
+      await AuthService.signOut();
+    }
+  });
 }
 
-const Notification= ()=>{
-  
-
+const Notification= () => {
   HmsLocalNotification.localNotificationSchedule({
     [HmsLocalNotification.Attr.title]: 'Notification Title',
     [HmsLocalNotification.Attr.message]: 'Notification Message', // (required)
@@ -38,15 +40,13 @@ const Notification= ()=>{
     [HmsLocalNotification.Attr.autoCancel]: false,
     [HmsLocalNotification.Attr.actions]: '["Yes", "No"]',
     [HmsLocalNotification.Attr.fireDate]: new Date(Date.now() + 60 * 1000).getTime(), // in 1 min
-    })
-    .then((result) => {
-      console.log("LocalNotification Default", result);
-    })
-    .catch((err) => {
-      alert(
-        "[LocalNotification Default] Error/Exception: " + JSON.stringify(err)
-      );
-    });
+  })
+  .then((result) => {
+    console.log("LocalNotification Default", result);
+  })
+  .catch((err) => {
+    alert("[LocalNotification Default] Error/Exception: " + JSON.stringify(err));
+  });
 }
 
 const HomeScreen = () => {
