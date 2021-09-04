@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
 import HMSAccount, {HMSAuthRequestOptionConstants, HMSAccountAuthService, HMSAuthParamConstants, HMSAuthScopeListConstants, HMSAuthButton} from '@hmscore/react-native-hms-account';
 import AuthService from '../../services/AuthService';
-
+import UserService from '../../services/UserService';
 
 state ={
   token:{}
@@ -27,9 +27,13 @@ const silentSignIn = () => {
     accountAuthParams: HMSAuthParamConstants.DEFAULT_AUTH_REQUEST_PARAM
   };
   HMSAccountAuthService.silentSignIn(silentSignInData)
-  .then((response) => {
-    console.log(response);
-    saveTokenLocalStorage(response);
+  .then(async (response) => {
+    const { avatarUriString, displayName } = response;
+    await UserService.saveUser({
+      avatarUriString: avatarUriString,
+      displayName: displayName
+    });
+    await saveTokenLocalStorage(response);
   })
   .catch((err) => {
     if(err.code == 2002) {
