@@ -198,17 +198,19 @@ const styles = StyleSheet.create({
     padding: 12,
     justifyContent: 'center',
     backgroundColor: '#FF6347',
-    borderRadius: 12
+    borderRadius: 12,
+    marginBottom:hp('9.35%'),
+    marginTop:hp('9.35%')
   },
   signOutButtonText: {
     color: 'white',
     fontSize: 17
   },
   switchNotification:{
-    marginTop: 50,
+    marginTop: hp('9.23%'),
     alignItems:'center',
-    position: 'absolute',
-    bottom: 10,
+   // position: 'absolute',
+    marginBottom:hp('6.2%'),
     alignSelf: 'center'
   },
   circleSwitchnotification: {
