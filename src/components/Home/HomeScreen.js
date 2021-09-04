@@ -117,6 +117,10 @@ const HomeScreen = () => {
   const screenHeight = hp('100%');
   console.log(screenHeight);
 
+  const imageSource = (user.avatarUriString == 'Guest')
+    ? require('../../assets/user.png')
+    : { uri: user.avatarUriString };
+
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -127,7 +131,7 @@ const HomeScreen = () => {
           (user.avatarUriString == '') ?
             <ActivityIndicator style={styles.profileImage} size="large" color="blue" />
           :
-            <Image style={styles.profileImage} source={{ uri: user.avatarUriString }} resizeMode='contain' />
+            <Image style={styles.profileImage} source={imageSource} resizeMode='contain' />
         }
       </View>
       
