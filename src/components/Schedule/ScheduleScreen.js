@@ -94,14 +94,19 @@ const ScheduleScreen=({navigation})=>{
   const validateTimeInitialAndFinal = (initial , final) => {
     let timeInitial = initial.split(":");
     let hourInitial = parseInt(timeInitial[0]);
-    let minuteInitial = timeInitial[1];
+    let minuteInitial = parseInt(timeInitial[1]);
     let timeFinal = final.split(":");
     let hourFinal = parseInt(timeFinal[0]);
-    let minuteFinal = timeFinal[1];
+    let minuteFinal = parseInt(timeFinal[1]);
     let isValidateTime = false;
     if((hourInitial > 0 && hourInitial <= 12  && hourFinal > 0 && hourFinal <= 12) || ((hourInitial > 12 || hourInitial === 0) && hourInitial <= 23  && (hourFinal > 12 || hourFinal === 0 ) && hourFinal <= 23) ) {
       if(hourFinal > hourInitial) {
         isValidateTime = true
+      }
+      else{
+        if((hourFinal === hourInitial) && ( minuteFinal > minuteInitial)) {
+          isValidateTime = true
+        }
       }
     }
     return isValidateTime;
