@@ -139,10 +139,15 @@ const HomeScreen = () => {
 
       <View style={styles.switchNotification}>
         <View style={styles.circleSwitchnotification}>
-          <Image
-            style={[styles.iconoSwitch,{tintColor: isEnabled? '#21D348':'#EF4646'}]}
-            source={require('../../assets/iconoPedir.png')}
-          />
+          {
+            (loading) ?
+              <ActivityIndicator style={styles.iconoSwitch} size="large" color="#bc2b78" />
+            :
+            <Image
+              style={[styles.iconoSwitch,{tintColor: isEnabled? '#21D348':'#EF4646'}]}
+              source={require('../../assets/iconoPedir.png')}
+            />
+          }
           <Switch
             trackColor={{ false: "#767577", true: "#619288" }}
             thumbColor={isEnabled ? "#619288" : "#619288"}
@@ -214,7 +219,8 @@ const styles = StyleSheet.create({
   },
   iconoSwitch:{
     width: 75,
-    height: 75
+    height: 75,
+    marginBottom: 5
   }
 });
 
