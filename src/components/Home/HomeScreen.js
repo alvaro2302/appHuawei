@@ -114,6 +114,9 @@ const HomeScreen = () => {
     await setUser(userData);
   }, []);
 
+  const screenHeight = hp('100%');
+  console.log(screenHeight);
+
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -137,7 +140,7 @@ const HomeScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.switchNotification}>
+      <View style={(screenHeight <= 592) ? styles.switchNotification : styles.switchNotificationAbsolute}>
         <View style={styles.circleSwitchnotification}>
           {
             (loading) ?
@@ -205,6 +208,10 @@ const styles = StyleSheet.create({
     fontSize: 17
   },
   switchNotification:{
+    marginTop: 50,
+    alignItems:'center',
+  },
+  switchNotificationAbsolute: {
     marginTop: 50,
     alignItems:'center',
     position: 'absolute',
