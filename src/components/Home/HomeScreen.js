@@ -23,6 +23,14 @@ const SignOut =  () => {
   });
 }
 
+const sleep = async(ms) => {
+  return new Promise((resolve) =>
+    setTimeout(() => {
+      resolve('result') 
+    }, ms)
+  );
+}
+
 const Notification= () => {
   HmsLocalNotification.localNotificationSchedule({
     [HmsLocalNotification.Attr.title]: 'Notification Title',
@@ -111,6 +119,7 @@ const HomeScreen = () => {
 
   useEffect(async () => {
     const userData = await UserService.getUser();
+    await sleep(5000);
     await setUser(userData);
   }, []);
 
@@ -119,8 +128,15 @@ const HomeScreen = () => {
       <View style={styles.title}>
         <Text style={styles.titleText}>{user.displayName}</Text>
       </View>
-      <Image style={styles.profileImage} source={{ uri: user.avatarUriString }} resizeMode='contain' />
-
+      <View>
+        {
+          (user.avatarUriString == '') ?
+            <ActivityIndicator style={styles.profileImage} size="large" color="blue" />
+          :
+            <Image style={styles.profileImage} source={{ uri: user.avatarUriString }} resizeMode='contain' />
+        }
+      </View>
+      
       <View style={styles.signOutButtonContainer}>
         <TouchableOpacity
           style={styles.signOutButton}
