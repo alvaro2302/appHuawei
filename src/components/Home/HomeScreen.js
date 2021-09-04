@@ -121,21 +121,15 @@ const HomeScreen = () => {
       </View>
       <Image style={styles.profileImage} source={{ uri: user.avatarUriString }} resizeMode='contain' />
 
-      <TouchableOpacity
-        style={[styles.huaweiButton], [styles.socialLoginButton]}
-        onPress={SignOut}
-      >
+      <View style={styles.signOutButtonContainer}>
+        <TouchableOpacity
+          style={styles.signOutButton}
+          onPress={SignOut}
+        >
+          <Text style={styles.signOutButtonText}>Sign out</Text>
+        </TouchableOpacity>
+      </View>
 
-        <Text>Sign out</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.huaweiNotification], [styles.socialLoginButton]}
-        onPress={Notification}
-      >
-        
-        <Text>Notificacion en 1 minuto</Text>
-      </TouchableOpacity>
       <View style={styles.switchNotification}>
         <View style={styles.circleSwitchnotification}>
           
@@ -189,18 +183,22 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 30
   },
-  huaweiButton: {
-    backgroundColor: '#DF2A54'
-  },
   huaweiNotification:{
     backgroundColor:'red'
   },
-  socialLoginButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  signOutButtonContainer: {
+    marginTop: 45
+  },
+  signOutButton: {
+    alignSelf: 'center',
+    padding: 12,
     justifyContent: 'center',
-    width: '65%',
-    marginBottom: 15
+    backgroundColor: '#FF6347',
+    borderRadius: 12
+  },
+  signOutButtonText: {
+    color: 'white',
+    fontSize: 17
   },
   activityIndicator: {
     flex: 1,
