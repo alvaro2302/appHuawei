@@ -1,21 +1,23 @@
-import React,{ useEffect, useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Switch ,Image,ActivityIndicator} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Switch, Image, ActivityIndicator } from 'react-native';
 import AuthService from '../../services/AuthService';
-import { HmsLocalNotification,HmsPushResultCode } from'@hmscore/react-native-hms-push';
-import{ HmsPushInstanceId }from "@hmscore/react-native-hms-push";
+import { HmsLocalNotification } from'@hmscore/react-native-hms-push';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import HMSLocation from '@hmscore/react-native-hms-location';
 import LocationService from '../../services/LocationService';
 import { HMSAccountAuthService } from '@hmscore/react-native-hms-account';
+import UserService from '../../services/UserService';
 
 const SignOut =  () => {
   HMSAccountAuthService.signOut()
   .then(async () => {
     console.log("signOut -> Success")
+    await UserService.deleteUser();
     await AuthService.signOut();
   })
   .catch(async (err) => {
     if(err.code == 3001) {
+      await UserService.deleteUser();
       await AuthService.signOut();
     }
   });
@@ -49,21 +51,20 @@ const Notification= () => {
   });
 }
 
+const addLocation = async (location)=>{
+  console.log("locationn")
+  await LocationService.addLocation(location);
+}
+
 const HomeScreen = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const addLocation = async(location)=>{
-    console.log("locationn")
-    // console.log(location.longitude);
-    // console.log(location.latitude);
-    await LocationService.addLocation(location);
-
-  }
-
+  const [user, setUser] = useState({
+    avatarUriString: '',
+    displayName: ''
+  });
 
   const toggleSwitch = async() => {
-
     const locationRequest = {
       priority: HMSLocation.FusedLocation.Native.PriorityConstants.PRIORITY_HIGH_ACCURACY,
       interval: 3,
@@ -77,86 +78,85 @@ const HomeScreen = () => {
       language: 'en',
       countryCode: 'en',
     };
-    
-
     const locationSettingsRequest = {
       locationRequests: [locationRequest],
       alwaysShow: false,
       needBle: false,
     }
-
-    if(!isEnabled){
+    if(!isEnabled) {
       setLoading(true);
       HMSLocation.FusedLocation.Native.checkLocationSettings(locationSettingsRequest)
-        .then(res => {
-          
-          console.log("Location setting result:", JSON.stringify(res, null, 2))
-          HMSLocation.FusedLocation.Native.getLastLocation()
-          .then(async function(pos)  {
-            let location = pos;
-            await addLocation(location);
-            console.log("Last location:", JSON.stringify(pos, null, 2));
-            setIsEnabled(previousState =>!previousState);
-            setLoading(false)
-          })      
-          .catch(err => {
-            console.log('Failed to get last location', err)
-          });
-        })
-        .catch(ex => {
-          console.log("Error while getting location settings. " + ex)
-        })
+      .then(res => {  
+        console.log("Location setting result:", JSON.stringify(res, null, 2))
+        HMSLocation.FusedLocation.Native.getLastLocation()
+        .then(async function(pos)  {
+          let location = pos;
+          await addLocation(location);
+          console.log("Last location:", JSON.stringify(pos, null, 2));
+          setIsEnabled(previousState =>!previousState);
+          setLoading(false)
+        })      
+        .catch(err => {
+          console.log('Failed to get last location', err)
+        });
+      })
+      .catch(ex => {
+        console.log("Error while getting location settings. " + ex)
+      });
     }
-    else
-    {
+    else {
       setIsEnabled(previousState =>!previousState);
     }
-       
-           
-      
-            
-  
-    
-  
   }
+
+  useEffect(async () => {
+    const userData = await UserService.getUser();
+    await setUser(userData);
+  }, []);
+
+  const screenHeight = hp('100%');
+  console.log(screenHeight);
+
   return (
-    <View style={styles.container} >
-      <Text style={styles.title}>Home</Text>
-      <TouchableOpacity
-        style={[styles.huaweiButton], [styles.socialLoginButton]}
-        onPress={SignOut}
-      >
+    <View style={styles.container}>
+      <View style={styles.title}>
+        <Text style={styles.titleText}>{user.displayName}</Text>
+      </View>
+      <View>
+        {
+          (user.avatarUriString == '') ?
+            <ActivityIndicator style={styles.profileImage} size="large" color="blue" />
+          :
+            <Image style={styles.profileImage} source={{ uri: user.avatarUriString }} resizeMode='contain' />
+        }
+      </View>
+      
+      <View style={styles.signOutButtonContainer}>
+        <TouchableOpacity
+          style={styles.signOutButton}
+          onPress={SignOut}
+        >
+          <Text style={styles.signOutButtonText}>Sign out</Text>
+        </TouchableOpacity>
+      </View>
 
-        <Text>Sign out</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.huaweiNotification], [styles.socialLoginButton]}
-        onPress={Notification}
-      >
-        
-        <Text>Notificacion en 1 minuto</Text>
-      </TouchableOpacity>
-      <View style={styles.switchNotification}>
+      <View style={(screenHeight <= 592) ? styles.switchNotification : styles.switchNotificationAbsolute}>
         <View style={styles.circleSwitchnotification}>
-          
-          <Image
-            style={[styles.iconoSwitch,{tintColor: isEnabled? '#21D348':'#EF4646'}]}
-            source={require('../../assets/iconoPedir.png')}
-          />
-        
+          {
+            (loading) ?
+              <ActivityIndicator style={styles.iconoSwitch} size="large" color="#bc2b78" />
+            :
+            <Image
+              style={[styles.iconoSwitch,{tintColor: isEnabled? '#21D348':'#EF4646'}]}
+              source={require('../../assets/iconoPedir.png')}
+            />
+          }
           <Switch
             trackColor={{ false: "#767577", true: "#619288" }}
             thumbColor={isEnabled ? "#619288" : "#619288"}
             ios_backgroundColor="#3e3e3e"
             onValueChange={toggleSwitch}
             value={isEnabled}
-          />
-          <ActivityIndicator
-            animating = {loading}
-            color = '#bc2b78'
-            size = "small"
-            style = {styles.activityIndicator}
           />
         </View>
       </View>
@@ -170,58 +170,68 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF'
   },
   title: {
-    fontSize: 36,
+    fontSize: 17,
     lineHeight: 40,
-    marginTop: 35,
-    marginBottom: 25
+    marginTop: 10,
+    borderBottomColor: 'grey',
+    borderBottomWidth: 0.2,
+    width: wp('95%'),
+    alignSelf: 'center',
+    padding: 10
   },
-  huaweiButton: {
-    backgroundColor: '#DF2A54'
+  titleText: {
+    alignSelf: 'center',
+    fontWeight: 'bold'
+  },
+  profileImage: {
+    width: 144,
+    height: 144,
+    borderRadius: 50,
+    alignSelf: 'center',
+    marginTop: 30
   },
   huaweiNotification:{
     backgroundColor:'red'
   },
-  socialLoginButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '65%',
-    marginBottom: 15
+  signOutButtonContainer: {
+    marginTop: 45
   },
-  activityIndicator: {
-    flex: 1,
+  signOutButton: {
+    alignSelf: 'center',
+    padding: 12,
     justifyContent: 'center',
-    alignItems: 'center',
-    height: 80
+    backgroundColor: '#FF6347',
+    borderRadius: 12
+  },
+  signOutButtonText: {
+    color: 'white',
+    fontSize: 17
   },
   switchNotification:{
-    marginTop:hp('50%'),
-    marginBottom:hp('6.2%'),
+    marginTop: 50,
     alignItems:'center'
   },
-  circleSwitchnotification:{
-   
-    width:wp('41.8%'),
-    height:hp('19.7%'),
+  switchNotificationAbsolute: {
+    marginTop: 50,
+    alignItems:'center',
+    position: 'absolute',
+    bottom: 10,
+    alignSelf: 'center'
+  },
+  circleSwitchnotification: {
     backgroundColor:'#ECECEC',
-    borderRadius:(wp('41.5%')+ hp('17.7%'))/2,
     alignItems: 'center',
     justifyContent:'center',
-    
+    padding: 20,
+    paddingLeft: 40,
+    paddingRight: 40,
+    borderRadius: 75
   },
   iconoSwitch:{
-    marginTop:hp('1%'),
-    width:wp('20.5%'),
-    height:hp('9.8%'),
-  
-  },
-  activityIndicator: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop:0,
-    height: 80
- }
+    width: 75,
+    height: 75,
+    marginBottom: 5
+  }
 });
 
 export default HomeScreen;
