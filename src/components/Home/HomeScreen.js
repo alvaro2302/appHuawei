@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Switch, Image, ActivityIndicator } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Switch, Image, ActivityIndicator } from 'react-native';
 import AuthService from '../../services/AuthService';
 import { HmsLocalNotification } from'@hmscore/react-native-hms-push';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -118,7 +118,7 @@ const HomeScreen = () => {
   console.log(screenHeight);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.titleText}>{user.displayName}</Text>
       </View>
@@ -160,7 +160,7 @@ const HomeScreen = () => {
           />
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
   },
   switchNotification:{
     marginTop: 50,
-    alignItems:'center',
+    alignItems:'center'
   },
   switchNotificationAbsolute: {
     marginTop: 50,
