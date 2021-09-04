@@ -1,5 +1,5 @@
 import React,{ useEffect, useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Switch ,Image} from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Switch ,Image,ActivityIndicator} from 'react-native';
 import AuthService from '../../services/AuthService';
 import { HmsLocalNotification,HmsPushResultCode } from'@hmscore/react-native-hms-push';
 import{ HmsPushInstanceId }from "@hmscore/react-native-hms-push";
@@ -51,7 +51,8 @@ const Notification= ()=>{
 
 const HomeScreen = () => {
   const [isEnabled, setIsEnabled] = useState(false);
- 
+  const [loading, setLoading] = useState(false);
+
   const addLocation = async(location)=>{
     console.log("locationn")
     // console.log(location.longitude);
@@ -85,25 +86,26 @@ const HomeScreen = () => {
     }
 
     if(!isEnabled){
-    HMSLocation.FusedLocation.Native.checkLocationSettings(locationSettingsRequest)
-      .then(res => {
-        
-        console.log("Location setting result:", JSON.stringify(res, null, 2))
-        HMSLocation.FusedLocation.Native.getLastLocation()
-        .then(async function(pos)  {
-          let location = pos;
-          await addLocation(location);
-          console.log("Last location:", JSON.stringify(pos, null, 2));
-          setIsEnabled(previousState =>!previousState);
-         
-        })      
-        .catch(err => {
-          console.log('Failed to get last location', err)
-        });
-      })
-      .catch(ex => {
-        console.log("Error while getting location settings. " + ex)
-      })
+      setLoading(true);
+      HMSLocation.FusedLocation.Native.checkLocationSettings(locationSettingsRequest)
+        .then(res => {
+          
+          console.log("Location setting result:", JSON.stringify(res, null, 2))
+          HMSLocation.FusedLocation.Native.getLastLocation()
+          .then(async function(pos)  {
+            let location = pos;
+            await addLocation(location);
+            console.log("Last location:", JSON.stringify(pos, null, 2));
+            setIsEnabled(previousState =>!previousState);
+            setLoading(false)
+          })      
+          .catch(err => {
+            console.log('Failed to get last location', err)
+          });
+        })
+        .catch(ex => {
+          console.log("Error while getting location settings. " + ex)
+        })
     }
     else
     {
@@ -149,6 +151,12 @@ const HomeScreen = () => {
             ios_backgroundColor="#3e3e3e"
             onValueChange={toggleSwitch}
             value={isEnabled}
+          />
+          <ActivityIndicator
+            animating = {loading}
+            color = '#bc2b78'
+            size = "small"
+            style = {styles.activityIndicator}
           />
         </View>
       </View>
@@ -198,14 +206,22 @@ const styles = StyleSheet.create({
     backgroundColor:'#ECECEC',
     borderRadius:(wp('41.5%')+ hp('17.7%'))/2,
     alignItems: 'center',
-    justifyContent:'center'
+    justifyContent:'center',
     
   },
   iconoSwitch:{
+    marginTop:hp('1%'),
     width:wp('20.5%'),
     height:hp('9.8%'),
   
-  }
+  },
+  activityIndicator: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop:0,
+    height: 80
+ }
 });
 
 export default HomeScreen;
