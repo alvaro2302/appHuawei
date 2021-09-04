@@ -10,3 +10,16 @@ exports.getLocations = async () => {
   const locationResult = await query.find();
   return locationResult;
 }
+
+exports.addLocation= async(location)=>{
+  try {
+    const newLocation = new Parse.Object('Location');
+
+    newLocation.set('lat',location.latitude.toString());
+    newLocation.set('lng',location.longitude.toString());
+    await newLocation.save();
+  } catch (error) {
+    console.log('error save new location',error);
+  }
+
+}
