@@ -23,14 +23,6 @@ const SignOut =  () => {
   });
 }
 
-const sleep = async(ms) => {
-  return new Promise((resolve) =>
-    setTimeout(() => {
-      resolve('result') 
-    }, ms)
-  );
-}
-
 const Notification= () => {
   HmsLocalNotification.localNotificationSchedule({
     [HmsLocalNotification.Attr.title]: 'Notification Title',
@@ -119,7 +111,6 @@ const HomeScreen = () => {
 
   useEffect(async () => {
     const userData = await UserService.getUser();
-    await sleep(5000);
     await setUser(userData);
   }, []);
 
