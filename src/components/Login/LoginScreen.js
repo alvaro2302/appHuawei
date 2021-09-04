@@ -15,9 +15,9 @@ const signInWithIdToken = () => {
     authScopeList: [HMSAuthScopeListConstants.EMAIL]
   };
   HMSAccountAuthService.signIn(signInData)
-  .then((response) => {
-    console.log(response);
-    saveTokenLocalStorage(response);
+  .then(async (response) => {
+    await saveUser(response);
+    await saveTokenLocalStorage(response);
   })
   .catch((err) => { console.log('Sign In With IdToken -> ', err) });
 };
@@ -28,11 +28,7 @@ const silentSignIn = () => {
   };
   HMSAccountAuthService.silentSignIn(silentSignInData)
   .then(async (response) => {
-    const { avatarUriString, displayName } = response;
-    await UserService.saveUser({
-      avatarUriString: avatarUriString,
-      displayName: displayName
-    });
+    await saveUser(response);
     await saveTokenLocalStorage(response);
   })
   .catch((err) => {
@@ -48,6 +44,14 @@ const silentSignIn = () => {
 const saveTokenLocalStorage = async (rawToken) => {
   const valueToken = JSON.stringify(rawToken);
   await AuthService.signIn(valueToken);
+}
+
+const saveUser = async (data) => {
+  const { avatarUriString, displayName } = data;
+  await UserService.saveUser({
+    avatarUriString: avatarUriString,
+    displayName: displayName
+  });
 }
 
 const LoginScreen = ({navigation}) => {

@@ -7,15 +7,18 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nati
 import HMSLocation from '@hmscore/react-native-hms-location';
 import LocationService from '../../services/LocationService';
 import { HMSAccountAuthService } from '@hmscore/react-native-hms-account';
+import UserService from '../../services/UserService';
 
 const SignOut =  () => {
   HMSAccountAuthService.signOut()
   .then(async () => {
     console.log("signOut -> Success")
+    await UserService.deleteUser();
     await AuthService.signOut();
   })
   .catch(async (err) => {
     if(err.code == 3001) {
+      await UserService.deleteUser();
       await AuthService.signOut();
     }
   });
