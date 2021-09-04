@@ -1,20 +1,21 @@
-import React,{ useEffect, useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React from 'react';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import AuthService from '../../services/AuthService';
-import { HmsLocalNotification,HmsPushResultCode } from'@hmscore/react-native-hms-push';
-import{ HmsPushInstanceId }from "@hmscore/react-native-hms-push";
-const SignOut =  () => {
+import { HmsLocalNotification } from'@hmscore/react-native-hms-push';
+import { HMSAccountAuthService } from '@hmscore/react-native-hms-account';
+
+const SignOut = async () => {
   HMSAccountAuthService.signOut()
-  .then(async () => { 
+  .then(async () => {
     console.log("signOut -> Success")
     await AuthService.signOut();
   })
-  .catch((err) => { console.log(err) });
+  .catch((err) => {
+    console.log(err)
+  });
 }
 
-const Notification= ()=>{
-  
-
+const Notification= () => {
   HmsLocalNotification.localNotificationSchedule({
     [HmsLocalNotification.Attr.title]: 'Notification Title',
     [HmsLocalNotification.Attr.message]: 'Notification Message', // (required)
@@ -33,15 +34,13 @@ const Notification= ()=>{
     [HmsLocalNotification.Attr.autoCancel]: false,
     [HmsLocalNotification.Attr.actions]: '["Yes", "No"]',
     [HmsLocalNotification.Attr.fireDate]: new Date(Date.now() + 60 * 1000).getTime(), // in 1 min
-    })
-    .then((result) => {
-      console.log("LocalNotification Default", result);
-    })
-    .catch((err) => {
-      alert(
-        "[LocalNotification Default] Error/Exception: " + JSON.stringify(err)
-      );
-    });
+  })
+  .then((result) => {
+    console.log("LocalNotification Default", result);
+  })
+  .catch((err) => {
+    alert("[LocalNotification Default] Error/Exception: " + JSON.stringify(err));
+  });
 }
 
 const HomeScreen = () => {
