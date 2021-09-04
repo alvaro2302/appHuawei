@@ -1,8 +1,12 @@
 import React,{ useEffect, useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Switch ,Image} from 'react-native';
 import AuthService from '../../services/AuthService';
 import { HmsLocalNotification,HmsPushResultCode } from'@hmscore/react-native-hms-push';
 import{ HmsPushInstanceId }from "@hmscore/react-native-hms-push";
+import {widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import HMSLocation from '@hmscore/react-native-hms-location';
+
+
 const SignOut =  () => {
   HMSAccountAuthService.signOut()
   .then(async () => { 
@@ -45,6 +49,62 @@ const Notification= ()=>{
 }
 
 const HomeScreen = () => {
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => {
+
+
+
+    const locationRequest = {
+      priority: HMSLocation.FusedLocation.Native.PriorityConstants.PRIORITY_HIGH_ACCURACY,
+      interval: 3,
+      numUpdates: 10,
+      fastestInterval: 1000.0,
+      expirationTime: 200000.0,
+      expirationTimeDuration: 200000.0,
+      smallestDisplacement: 0.0,
+      maxWaitTime: 2000000.0,
+      needAddress: true,
+      language: 'en',
+      countryCode: 'en',
+    };
+    
+
+    const locationSettingsRequest = {
+      locationRequests: [locationRequest],
+      alwaysShow: false,
+      needBle: false,
+    }
+
+    if(!isEnabled){
+    HMSLocation.FusedLocation.Native.checkLocationSettings(locationSettingsRequest)
+      .then(res => {
+        
+        console.log("Location setting result:", JSON.stringify(res, null, 2))
+        HMSLocation.FusedLocation.Native.getLastLocation()
+        .then(pos => {
+          setIsEnabled(previousState =>!previousState);
+          console.log("Last location:", JSON.stringify(pos, null, 2))
+        })      
+        .catch(err => {
+          console.log('Failed to get last location', err)
+        });
+      })
+      .catch(ex => {
+        console.log("Error while getting location settings. " + ex)
+      })
+    }
+    else
+    {
+      setIsEnabled(previousState =>!previousState);
+    }
+       
+           
+      
+            
+  
+    
+  
+  }
   return (
     <View style={styles.container} >
       <Text style={styles.title}>Home</Text>
@@ -60,8 +120,26 @@ const HomeScreen = () => {
         style={[styles.huaweiNotification], [styles.socialLoginButton]}
         onPress={Notification}
       >
+        
         <Text>Notificacion en 1 minuto</Text>
       </TouchableOpacity>
+      <View style={styles.switchNotification}>
+        <View style={styles.circleSwitchnotification}>
+          
+          <Image
+            style={[styles.iconoSwitch,{tintColor: isEnabled? '#21D348':'#EF4646'}]}
+            source={require('../../assets/iconoPedir.png')}
+          />
+        
+          <Switch
+            trackColor={{ false: "#767577", true: "#619288" }}
+            thumbColor={isEnabled ? "#619288" : "#619288"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={isEnabled}
+          />
+        </View>
+      </View>
     </View>
   );
 }
@@ -95,7 +173,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: 80
- }
+  },
+  switchNotification:{
+    marginTop:hp('50%'),
+    marginBottom:hp('6.2%'),
+    alignItems:'center'
+  },
+  circleSwitchnotification:{
+   
+    width:wp('41.8%'),
+    height:hp('19.7%'),
+    backgroundColor:'#ECECEC',
+    borderRadius:(wp('41.5%')+ hp('17.7%'))/2,
+    alignItems: 'center',
+    justifyContent:'center'
+    
+  },
+  iconoSwitch:{
+    width:wp('20.5%'),
+    height:hp('9.8%'),
+  
+  }
 });
 
 export default HomeScreen;
