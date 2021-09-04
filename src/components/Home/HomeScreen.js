@@ -10,8 +10,10 @@ const SignOut = async () => {
     console.log("signOut -> Success")
     await AuthService.signOut();
   })
-  .catch((err) => {
-    console.log(err)
+  .catch(async (err) => {
+    if(err.code == 3001) {
+      await AuthService.signOut();
+    }
   });
 }
 
