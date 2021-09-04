@@ -139,24 +139,16 @@ const HomeScreen = () => {
 
       <View style={styles.switchNotification}>
         <View style={styles.circleSwitchnotification}>
-          
           <Image
             style={[styles.iconoSwitch,{tintColor: isEnabled? '#21D348':'#EF4646'}]}
             source={require('../../assets/iconoPedir.png')}
           />
-        
           <Switch
             trackColor={{ false: "#767577", true: "#619288" }}
             thumbColor={isEnabled ? "#619288" : "#619288"}
             ios_backgroundColor="#3e3e3e"
             onValueChange={toggleSwitch}
             value={isEnabled}
-          />
-          <ActivityIndicator
-            animating = {loading}
-            color = '#bc2b78'
-            size = "small"
-            style = {styles.activityIndicator}
           />
         </View>
       </View>
@@ -207,40 +199,23 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 17
   },
-  activityIndicator: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 80
-  },
   switchNotification:{
-    marginTop:hp('50%'),
-    marginBottom:hp('6.2%'),
+    marginTop: 50,
     alignItems:'center'
   },
-  circleSwitchnotification:{
-   
-    width:wp('41.8%'),
-    height:hp('19.7%'),
+  circleSwitchnotification: {
     backgroundColor:'#ECECEC',
-    borderRadius:(wp('41.5%')+ hp('17.7%'))/2,
     alignItems: 'center',
     justifyContent:'center',
-    
+    padding: 20,
+    paddingLeft: 40,
+    paddingRight: 40,
+    borderRadius: 75
   },
   iconoSwitch:{
-    marginTop:hp('1%'),
-    width:wp('20.5%'),
-    height:hp('9.8%'),
-  
-  },
-  activityIndicator: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop:0,
-    height: 80
- }
+    width: 75,
+    height: 75
+  }
 });
 
 export default HomeScreen;

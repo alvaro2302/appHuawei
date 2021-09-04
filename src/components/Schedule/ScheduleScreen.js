@@ -138,7 +138,7 @@ const ScheduleScreen=({navigation})=>{
   const updateDaysData = async () => {
     try {
       const listKeys = await StorageService.getkeys();
-      const listkeysDays = listKeys.filter((key) => key != 'token' && key != 'Parse/yagl2Yo3F2OjpvdfK6sgDUlRhruxAvpMHa9HdQBO/installationId');
+      const listkeysDays = listKeys.filter((key) => key != 'token' && key != 'Parse/yagl2Yo3F2OjpvdfK6sgDUlRhruxAvpMHa9HdQBO/installationId' && key != 'user');
 
       const days = await StorageService.multiGet(listkeysDays);
       const daysObjects = days.map((day)=> JSON.parse(day[1]));
