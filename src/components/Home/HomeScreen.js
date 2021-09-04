@@ -118,7 +118,7 @@ const HomeScreen = () => {
   console.log(screenHeight);
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.titleText}>{user.displayName}</Text>
       </View>
@@ -160,7 +160,7 @@ const HomeScreen = () => {
           />
         </View>
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
