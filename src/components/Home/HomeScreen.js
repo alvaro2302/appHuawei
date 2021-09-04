@@ -206,7 +206,10 @@ const styles = StyleSheet.create({
   },
   switchNotification:{
     marginTop: 50,
-    alignItems:'center'
+    alignItems:'center',
+    position: 'absolute',
+    bottom: 10,
+    alignSelf: 'center'
   },
   circleSwitchnotification: {
     backgroundColor:'#ECECEC',
