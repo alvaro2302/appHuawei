@@ -7,7 +7,7 @@ const hideLoadingScreen = () => {
   console.log('MAP LOADING ENDED');
 }
 
-const MapScreen = () => {
+const MapScreen = ({navigation}) => {
   const [locations, setLocations] = useState(null);
 
   const updateLocations = async () => {
@@ -16,9 +16,11 @@ const MapScreen = () => {
   }
 
   useEffect(async () => {
-    console.log('Locations Updated');
-    await updateLocations();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      updateLocations();
+    });
+    return unsubscribe;
+  }, [navigation]);
   
   if(!locations) {
     return <Text>Loading...</Text>

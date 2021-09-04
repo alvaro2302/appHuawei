@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@hmscore/react-native-hms-account": "^5.2.0-300",
+    "@hmscore/react-native-hms-location": "^5.1.0-303",
     "@hmscore/react-native-hms-map": "^5.2.0-302",
     "@hmscore/react-native-hms-push": "^5.3.0-301",
     "@react-native-async-storage/async-storage": "^1.15.6",
