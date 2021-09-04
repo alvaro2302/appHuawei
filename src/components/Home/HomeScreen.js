@@ -1,8 +1,7 @@
-import React,{ useEffect, useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Switch ,Image,ActivityIndicator} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity, Switch, Image, ActivityIndicator } from 'react-native';
 import AuthService from '../../services/AuthService';
-import { HmsLocalNotification,HmsPushResultCode } from'@hmscore/react-native-hms-push';
-import{ HmsPushInstanceId }from "@hmscore/react-native-hms-push";
+import { HmsLocalNotification } from'@hmscore/react-native-hms-push';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import HMSLocation from '@hmscore/react-native-hms-location';
 import LocationService from '../../services/LocationService';
@@ -52,21 +51,20 @@ const Notification= () => {
   });
 }
 
+const addLocation = async (location)=>{
+  console.log("locationn")
+  await LocationService.addLocation(location);
+}
+
 const HomeScreen = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const addLocation = async(location)=>{
-    console.log("locationn")
-    // console.log(location.longitude);
-    // console.log(location.latitude);
-    await LocationService.addLocation(location);
-
-  }
-
+  const [user, setUser] = useState({
+    avatarUriString: '',
+    displayName: ''
+  });
 
   const toggleSwitch = async() => {
-
     const locationRequest = {
       priority: HMSLocation.FusedLocation.Native.PriorityConstants.PRIORITY_HIGH_ACCURACY,
       interval: 3,
@@ -80,51 +78,49 @@ const HomeScreen = () => {
       language: 'en',
       countryCode: 'en',
     };
-    
-
     const locationSettingsRequest = {
       locationRequests: [locationRequest],
       alwaysShow: false,
       needBle: false,
     }
-
-    if(!isEnabled){
+    if(!isEnabled) {
       setLoading(true);
       HMSLocation.FusedLocation.Native.checkLocationSettings(locationSettingsRequest)
-        .then(res => {
-          
-          console.log("Location setting result:", JSON.stringify(res, null, 2))
-          HMSLocation.FusedLocation.Native.getLastLocation()
-          .then(async function(pos)  {
-            let location = pos;
-            await addLocation(location);
-            console.log("Last location:", JSON.stringify(pos, null, 2));
-            setIsEnabled(previousState =>!previousState);
-            setLoading(false)
-          })      
-          .catch(err => {
-            console.log('Failed to get last location', err)
-          });
-        })
-        .catch(ex => {
-          console.log("Error while getting location settings. " + ex)
-        })
+      .then(res => {  
+        console.log("Location setting result:", JSON.stringify(res, null, 2))
+        HMSLocation.FusedLocation.Native.getLastLocation()
+        .then(async function(pos)  {
+          let location = pos;
+          await addLocation(location);
+          console.log("Last location:", JSON.stringify(pos, null, 2));
+          setIsEnabled(previousState =>!previousState);
+          setLoading(false)
+        })      
+        .catch(err => {
+          console.log('Failed to get last location', err)
+        });
+      })
+      .catch(ex => {
+        console.log("Error while getting location settings. " + ex)
+      });
     }
-    else
-    {
+    else {
       setIsEnabled(previousState =>!previousState);
     }
-       
-           
-      
-            
-  
-    
-  
   }
+
+  useEffect(async () => {
+    const userData = await UserService.getUser();
+    await setUser(userData);
+  }, []);
+
   return (
-    <View style={styles.container} >
-      <Text style={styles.title}>Home</Text>
+    <View style={styles.container}>
+      <View style={styles.title}>
+        <Text style={styles.titleText}>{user.displayName}</Text>
+      </View>
+      <Image style={styles.profileImage} source={{ uri: user.avatarUriString }} resizeMode='contain' />
+
       <TouchableOpacity
         style={[styles.huaweiButton], [styles.socialLoginButton]}
         onPress={SignOut}
@@ -173,10 +169,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF'
   },
   title: {
-    fontSize: 36,
+    fontSize: 17,
     lineHeight: 40,
-    marginTop: 35,
-    marginBottom: 25
+    marginTop: 10,
+    borderBottomColor: 'grey',
+    borderBottomWidth: 0.2,
+    width: wp('95%'),
+    alignSelf: 'center',
+    padding: 10
+  },
+  titleText: {
+    alignSelf: 'center',
+    fontWeight: 'bold'
+  },
+  profileImage: {
+    width: 144,
+    height: 144,
+    borderRadius: 50,
+    alignSelf: 'center',
+    marginTop: 30
   },
   huaweiButton: {
     backgroundColor: '#DF2A54'
