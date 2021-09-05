@@ -122,6 +122,10 @@ const HomeScreen = () => {
     await setUser(userData);
     const isGuest = await UserService.isGuest();
     await setGuest(isGuest);
+    if(HmsLocalNotification.Attr.invokeApp)
+      {
+        console.log("ha entrado en la aplicacion por una notificacion Homee");
+      }
   }, []);
 
   const screenHeight = hp('100%');
