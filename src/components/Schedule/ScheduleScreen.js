@@ -14,9 +14,11 @@ import { HmsLocalNotification, HmsPushEvent } from'@hmscore/react-native-hms-pus
 
 HmsPushEvent.onLocalNotificationAction((result) => {
   console.log("[onLocalNotificationAction]: " + result);
-  var notification = JSON.parse(result.dataJSON);
+  const notification = JSON.parse(result.dataJSON);
   if (notification.action === "Yes") {
-    HmsLocalNotification.cancelNotificationsWithId([notification.id]);
+    HmsLocalNotification.cancelNotificationsWithTag('hms_tag').then((result) => {
+      console.log(result);
+    });
   }
   console.log("Clicked: " + notification.action);
 });
@@ -181,7 +183,7 @@ const ScheduleScreen = ({navigation}) => {
       [HmsLocalNotification.Attr.vibrate]: true,
       [HmsLocalNotification.Attr.vibrateDuration]: 1000,
       [HmsLocalNotification.Attr.tag]: 'hms_tag',
-      [HmsLocalNotification.Attr.ongoing]: false,
+      [HmsLocalNotification.Attr.ongoing]: true,
       [HmsLocalNotification.Attr.importance]: HmsLocalNotification.Importance.max,
       [HmsLocalNotification.Attr.dontNotifyInForeground]: false,
       [HmsLocalNotification.Attr.autoCancel]: false,
