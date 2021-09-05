@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Alert } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './HomeScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -19,6 +20,9 @@ const Tab = createBottomTabNavigator();
 const disabledTab = {
   tabPress: e => {
     e.preventDefault();
+    Alert.alert("Error", "Debe iniciar sesión con Huawei para usar esta funcionalidad.", [
+      { text: "OK", onPress: () => console.log("OK Pressed") }
+    ]);
   }
 };
 
@@ -40,12 +44,14 @@ const HomeStack = () => {
       }}/>
       {
         !guest
-          ? <Tab.Screen name='Schedule' component={ScheduleStack} options={{
+          ?
+            <Tab.Screen name='Schedule' component={ScheduleStack} options={{
               tabBarIcon: ({focused}) => {
                 return <Icon name='calendar-sharp' size={16} color='#000' color={colorActivateIcon(focused)}/> 
               },
             }}/>
-          : <Tab.Screen name='Schedule' component={ScheduleStack} listeners={disabledTab} options={{
+          : 
+            <Tab.Screen name='Schedule' component={ScheduleStack} listeners={disabledTab} options={{
               tabBarIcon: ({focused}) => {
                 return <Icon name='calendar-sharp' size={16} color='#ddd'/> 
               }
@@ -59,7 +65,5 @@ const HomeStack = () => {
     </Tab.Navigator>
   )
 }
-
-
 
 export default HomeStack;

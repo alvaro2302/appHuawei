@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Switch, Image, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Switch, Image, ActivityIndicator, Alert } from 'react-native';
 import AuthService from '../../services/AuthService';
 import { HmsLocalNotification } from'@hmscore/react-native-hms-push';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -66,6 +66,13 @@ const HomeScreen = () => {
   });
 
   const toggleSwitch = async() => {
+    if(guest) {
+      Alert.alert("Error", "Debe iniciar sesión con Huawei para usar esta funcionalidad.", [
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]);
+      return;
+    }
+
     const locationRequest = {
       priority: HMSLocation.FusedLocation.Native.PriorityConstants.PRIORITY_HIGH_ACCURACY,
       interval: 3,
@@ -165,7 +172,6 @@ const HomeScreen = () => {
             thumbColor={(guest) ? '#ddd' : '#619288'}
             onValueChange={toggleSwitch}
             value={isEnabled}
-            disabled={guest}
           />
         </View>
       </View>

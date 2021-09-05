@@ -326,16 +326,16 @@ const ScheduleScreen=({navigation})=>{
       </Modal>
 
       <Modal transparent={true} visible={modalErrorVisible}>
-        <View style={{backgroundColor:'#000000aa',flex:1, justifyContent:'center'}}>   
+        <View style={{backgroundColor:'#000000aa',flex:1, justifyContent:'center'}}>
           <View style={styles.formError}>
             <Text style={styles.textErrorModal}>{messageError}</Text>
-            <TouchableOpacity style={styles.buttonAceptModalError} 
+            <TouchableOpacity style={styles.buttonAceptModalError}
               onPress={() => setModalErrorVisible(!modalErrorVisible)}
             >
               <Text style={styles.textColorButtonsConfirm}>Aceptar</Text>
             </TouchableOpacity>
           </View>
-        </View>         
+        </View>
       </Modal>
     </View>
   );
