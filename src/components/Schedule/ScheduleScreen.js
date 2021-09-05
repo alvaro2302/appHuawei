@@ -194,7 +194,7 @@ const ScheduleScreen = ({navigation}) => {
     const index = radio_props.index;
     const optionColorForm = radio_props.options[index];  
     if(validateForm(dayForm,hourInitialForm,houhourFinalForm,nameTransportForm,optionColorForm.color)) {
-      programateNotification(dayform,hourInitialForm);
+      programateNotification(dayForm,hourInitialForm);
       const token = new Date().toLocaleString();
       const dayFormCompleto = {
         id: token,
