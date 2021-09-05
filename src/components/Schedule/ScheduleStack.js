@@ -11,8 +11,8 @@ const Stack = createStackNavigator();
 
 const ScheduleStack = () => {
   return (
-    <Stack.Navigator initialRouteName='Schedule' >
-      <Stack.Screen name='Schedule' component={ScheduleScreen}   />
+    <Stack.Navigator initialRouteName='Schedules' >
+      <Stack.Screen name='Schedules' component={ScheduleScreen}   />
     </Stack.Navigator>
   )
 }
