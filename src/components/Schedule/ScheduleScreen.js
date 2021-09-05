@@ -10,7 +10,7 @@ import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DateService from '../../services/DateService';
 import StorageService from '../../services/StorageService';
-
+import { HmsLocalNotification } from'@hmscore/react-native-hms-push';
 const ScheduleScreen = ({navigation}) => {
   const [user, setUser] = useState({
     openId: ''
@@ -158,6 +158,34 @@ const ScheduleScreen = ({navigation}) => {
     }
   }
 
+  const programateNotification=(day, hour)=>{
+    HmsLocalNotification.localNotificationSchedule({
+      [HmsLocalNotification.Attr.title]: 'Alerta de Transporte ',
+      [HmsLocalNotification.Attr.message]: 'los conductores de transporte esperan saber donde estas', // (required)
+      [HmsLocalNotification.Attr.ticker]: 'hola ya es hora de pedir transporte',
+      [HmsLocalNotification.Attr.largeIcon]: 'ic_launcher',
+      [HmsLocalNotification.Attr.smallIcon]: 'ic_notification',
+      [HmsLocalNotification.Attr.bigText]: 'ya es hora de estar en el mapa',
+      [HmsLocalNotification.Attr.subText]: 'con solo un toque ',
+      [HmsLocalNotification.Attr.color]: 'white',
+      [HmsLocalNotification.Attr.vibrate]: true,
+      [HmsLocalNotification.Attr.vibrateDuration]: 1000,
+      [HmsLocalNotification.Attr.tag]: 'hms_tag',
+      [HmsLocalNotification.Attr.ongoing]: false,
+      [HmsLocalNotification.Attr.importance]: HmsLocalNotification.Importance.max,
+      [HmsLocalNotification.Attr.dontNotifyInForeground]: false,
+      [HmsLocalNotification.Attr.autoCancel]: false,   
+      [HmsLocalNotification.Attr.actions]: '["Ok"]',
+      [HmsLocalNotification.Attr.fireDate]: new Date(Date.now()).getTime(), // in 1 min
+    })
+    .then((result) => {
+      console.log("LocalNotification Default", result);
+    })
+    .catch((err) => {
+      alert("[LocalNotification Default] Error/Exception: " + JSON.stringify(err));
+    });
+  }
+
   const addToSchedule= async() => {
     const dayForm = selectedDay;    
     const hourInitialForm = hourInitial;
@@ -166,6 +194,7 @@ const ScheduleScreen = ({navigation}) => {
     const index = radio_props.index;
     const optionColorForm = radio_props.options[index];  
     if(validateForm(dayForm,hourInitialForm,houhourFinalForm,nameTransportForm,optionColorForm.color)) {
+      programateNotification(dayform,hourInitialForm);
       const token = new Date().toLocaleString();
       const dayFormCompleto = {
         id: token,
