@@ -47,7 +47,7 @@ const HomeStack = () => {
             }}/>
           : <Tab.Screen name='Schedule' component={ScheduleStack} listeners={disabledTab} options={{
               tabBarIcon: ({focused}) => {
-                return <Icon name='calendar-sharp' size={16} color='#dddddd'/> 
+                return <Icon name='calendar-sharp' size={16} color='#ddd'/> 
               }
             }}/>
       }

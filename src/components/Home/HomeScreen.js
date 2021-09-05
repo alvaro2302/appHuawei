@@ -59,6 +59,7 @@ const addLocation = async (location)=>{
 const HomeScreen = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [guest, setGuest] = useState(true);
   const [user, setUser] = useState({
     avatarUriString: '',
     displayName: ''
@@ -112,6 +113,8 @@ const HomeScreen = () => {
   useEffect(async () => {
     const userData = await UserService.getUser();
     await setUser(userData);
+    const isGuest = await UserService.isGuest();
+    await setGuest(isGuest);
   }, []);
 
   const screenHeight = hp('100%');
@@ -151,16 +154,18 @@ const HomeScreen = () => {
               <ActivityIndicator style={styles.iconoSwitch} size="large" color="#bc2b78" />
             :
             <Image
-              style={[styles.iconoSwitch,{tintColor: isEnabled? '#21D348':'#EF4646'}]}
+              style={[styles.iconoSwitch,{
+                tintColor: (guest) ? '#ccc' : (isEnabled ? '#21D348' : '#EF4646')
+              }]}
               source={require('../../assets/iconoPedir.png')}
             />
           }
           <Switch
             trackColor={{ false: "#767577", true: "#619288" }}
-            thumbColor={isEnabled ? "#619288" : "#619288"}
-            ios_backgroundColor="#3e3e3e"
+            thumbColor={(guest) ? '#ddd' : '#619288'}
             onValueChange={toggleSwitch}
             value={isEnabled}
+            disabled={guest}
           />
         </View>
       </View>
