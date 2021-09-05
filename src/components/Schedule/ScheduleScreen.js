@@ -183,7 +183,7 @@ const ScheduleScreen = ({navigation}) => {
       [HmsLocalNotification.Attr.vibrate]: true,
       [HmsLocalNotification.Attr.vibrateDuration]: 1000,
       [HmsLocalNotification.Attr.tag]: 'hms_tag',
-      [HmsLocalNotification.Attr.ongoing]: true,
+      [HmsLocalNotification.Attr.ongoing]: false,
       [HmsLocalNotification.Attr.importance]: HmsLocalNotification.Importance.max,
       [HmsLocalNotification.Attr.dontNotifyInForeground]: false,
       [HmsLocalNotification.Attr.autoCancel]: false,
