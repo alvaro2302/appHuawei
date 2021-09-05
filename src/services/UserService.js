@@ -22,9 +22,21 @@ exports.getUser = async() => {
   }
 }
 
-exports.deleteUser = async() => {
+exports.deleteUser = async () => {
   try {
     await AsyncStorage.removeItem('user');
+  }
+  catch (err) {
+    console.log('error', err);
+    throw Error(err);
+  }
+}
+
+exports.isGuest = async () => {
+  try {
+    const user = await AsyncStorage.getItem('user');
+    const userJson = JSON.parse(user);
+    return userJson.displayName == 'Guest';
   }
   catch (err) {
     console.log('error', err);
