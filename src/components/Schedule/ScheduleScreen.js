@@ -175,11 +175,12 @@ const ScheduleScreen = ({navigation}) => {
       [HmsLocalNotification.Attr.importance]: HmsLocalNotification.Importance.max,
       [HmsLocalNotification.Attr.dontNotifyInForeground]: false,
       [HmsLocalNotification.Attr.autoCancel]: false,   
-      [HmsLocalNotification.Attr.actions]: '["Ok"]',
+      [HmsLocalNotification.Attr.actions]: '["Yes", "No"]',
       [HmsLocalNotification.Attr.fireDate]: new Date(Date.now()).getTime(), // in 1 min
     })
     .then((result) => {
       console.log("LocalNotification Default", result);
+      
     })
     .catch((err) => {
       alert("[LocalNotification Default] Error/Exception: " + JSON.stringify(err));
@@ -224,6 +225,7 @@ const ScheduleScreen = ({navigation}) => {
 
     const unsubscribe = navigation.addListener('focus', () => {
       updateDaysData(userData);
+      
     });
     return unsubscribe;
   }, [navigation]);
