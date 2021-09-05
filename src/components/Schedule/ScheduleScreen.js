@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView,Modal,CheckBox,Tex
 import Day from '../Day/Day';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
+import UserService from '../../services/UserService';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Picker} from '@react-native-picker/picker';
@@ -10,7 +11,10 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import DateService from '../../services/DateService';
 import StorageService from '../../services/StorageService';
 
-const ScheduleScreen=({navigation})=>{
+const ScheduleScreen = ({navigation}) => {
+  const [user, setUser] = useState({
+    openId: ''
+  });
   const [modalVisible, setModalVisible] = useState(false);
   const [modalErrorVisible,setModalErrorVisible] = useState (false);
   const [radio_props, setRadio_props] = useState({options:[{label: 'alto', value: 0 ,color:'#FF6347'},{label: 'medio', value: 1,color:'#47A7FF' },{label: 'bajo', value: 1,color:'#AA817A' }],value:0,index:0});
@@ -135,12 +139,17 @@ const ScheduleScreen=({navigation})=>{
     }
   }
 
-  const updateDaysData = async () => {
+  const updateDaysData = async (updateDaysData) => {
     try {
-      const listKeys = await StorageService.getkeys();
+      /*const listKeys = await StorageService.getkeys();
       const listkeysDays = listKeys.filter((key) => key != 'token' && key != 'Parse/yagl2Yo3F2OjpvdfK6sgDUlRhruxAvpMHa9HdQBO/installationId' && key != 'user');
 
       const days = await StorageService.multiGet(listkeysDays);
+      const daysObjects = days.map((day)=> JSON.parse(day[1]));
+      setDays(daysObjects);*/
+
+      const schedules = await DateService.getDays(updateDaysData.openId);
+      const days = await StorageService.multiGet(schedules);
       const daysObjects = days.map((day)=> JSON.parse(day[1]));
       setDays(daysObjects);
     }
@@ -166,8 +175,8 @@ const ScheduleScreen=({navigation})=>{
         color:optionColorForm.color
       }
       const valueToken = JSON.stringify(dayFormCompleto);
-      await DateService.addDay(token, valueToken);
-      await updateDaysData();
+      await DateService.addDay(user.openId, valueToken);
+      await updateDaysData(user);
       setModalVisible(!modalVisible)
     }
     else {
@@ -179,9 +188,13 @@ const ScheduleScreen=({navigation})=>{
     <Day data={item}></Day>
   );
 
-  useEffect(() => {
+  useEffect(async () => {
+    const userData = await UserService.getUser();
+    await setUser(userData);
+    await updateDaysData(userData);
+
     const unsubscribe = navigation.addListener('focus', () => {
-      updateDaysData();
+      updateDaysData(userData);
     });
     return unsubscribe;
   }, [navigation]);
@@ -326,16 +339,16 @@ const ScheduleScreen=({navigation})=>{
       </Modal>
 
       <Modal transparent={true} visible={modalErrorVisible}>
-        <View style={{backgroundColor:'#000000aa',flex:1, justifyContent:'center'}}>   
+        <View style={{backgroundColor:'#000000aa',flex:1, justifyContent:'center'}}>
           <View style={styles.formError}>
             <Text style={styles.textErrorModal}>{messageError}</Text>
-            <TouchableOpacity style={styles.buttonAceptModalError} 
+            <TouchableOpacity style={styles.buttonAceptModalError}
               onPress={() => setModalErrorVisible(!modalErrorVisible)}
             >
               <Text style={styles.textColorButtonsConfirm}>Aceptar</Text>
             </TouchableOpacity>
           </View>
-        </View>         
+        </View>
       </Modal>
     </View>
   );

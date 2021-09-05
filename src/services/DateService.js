@@ -1,8 +1,17 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-exports.addDay = async(token, data)=>{
+exports.addDay = async(token, data) => {
   try {
-    await AsyncStorage.setItem(token, data);
+    const schedule = JSON.parse(data);
+    const newSchedule = await AsyncStorage.setItem(schedule.id, data);
+    let schedulesString = await AsyncStorage.getItem(token);
+    if(schedulesString == null) {
+      schedulesString = '[]';
+    }
+    const schedules = JSON.parse(schedulesString);
+    schedules.push(schedule.id);
+    schedulesString = JSON.stringify(schedules);
+    await AsyncStorage.setItem(token, schedulesString);
   }
   catch (err) {
     console.log('error', err);
@@ -10,9 +19,15 @@ exports.addDay = async(token, data)=>{
   }
 }
 
-exports.getDay = async(token)=>{
+exports.getDays = async(token)=>{
   try {
-    return await AsyncStorage.getItem(token);
+    let schedulesString = await AsyncStorage.getItem(token);
+    if(schedulesString == null) {
+      schedulesString = '[]';
+      return JSON.parse(schedulesString);
+    }
+    const schedules = JSON.parse(schedulesString);
+    return schedules;
   }
   catch (err) {
     console.log('not get token', err);

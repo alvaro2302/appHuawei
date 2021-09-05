@@ -41,16 +41,27 @@ const silentSignIn = () => {
   });
 }
 
+const guestLogin = async () => {
+  const guest = {
+    avatarUriString: 'Guest',
+    displayName: 'Guest',
+    openId: 'Guest'
+  }
+  await saveTokenLocalStorage(guest);
+  await saveUser(guest);
+}
+
 const saveTokenLocalStorage = async (rawToken) => {
   const valueToken = JSON.stringify(rawToken);
   await AuthService.signIn(valueToken);
 }
 
 const saveUser = async (data) => {
-  const { avatarUriString, displayName } = data;
+  const { avatarUriString, displayName, openId } = data;
   await UserService.saveUser({
     avatarUriString: avatarUriString,
-    displayName: displayName
+    displayName: displayName,
+    openId: openId
   });
 }
 
@@ -68,7 +79,7 @@ const LoginScreen = ({navigation}) => {
         <Text style={styles.socialLoginButtonText}>huawei id login</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={[styles.socialLoginButton, styles.guestButton]} onPress={() => navigation.navigate('Guest')}>
+      <TouchableOpacity style={[styles.socialLoginButton, styles.guestButton]} onPress={guestLogin}>
         <Image
           style={[styles.socialLoginButtonImage, styles.guestButtonImage]}
           source={require('../../assets/guest_login_icon.png')}

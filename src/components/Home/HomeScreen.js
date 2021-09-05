@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Switch, Image, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Switch, Image, ActivityIndicator, Alert } from 'react-native';
 import AuthService from '../../services/AuthService';
 import { HmsLocalNotification } from'@hmscore/react-native-hms-push';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -59,12 +59,20 @@ const addLocation = async (location)=>{
 const HomeScreen = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [guest, setGuest] = useState(true);
   const [user, setUser] = useState({
     avatarUriString: '',
     displayName: ''
   });
 
   const toggleSwitch = async() => {
+    if(guest) {
+      Alert.alert("Error", "Debe iniciar sesión con Huawei para usar esta funcionalidad.", [
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]);
+      return;
+    }
+
     const locationRequest = {
       priority: HMSLocation.FusedLocation.Native.PriorityConstants.PRIORITY_HIGH_ACCURACY,
       interval: 3,
@@ -112,10 +120,16 @@ const HomeScreen = () => {
   useEffect(async () => {
     const userData = await UserService.getUser();
     await setUser(userData);
+    const isGuest = await UserService.isGuest();
+    await setGuest(isGuest);
   }, []);
 
   const screenHeight = hp('100%');
   console.log(screenHeight);
+
+  const imageSource = (user.avatarUriString == 'Guest')
+    ? require('../../assets/user.png')
+    : { uri: user.avatarUriString };
 
   return (
     <View style={styles.container}>
@@ -127,7 +141,7 @@ const HomeScreen = () => {
           (user.avatarUriString == '') ?
             <ActivityIndicator style={styles.profileImage} size="large" color="blue" />
           :
-            <Image style={styles.profileImage} source={{ uri: user.avatarUriString }} resizeMode='contain' />
+            <Image style={styles.profileImage} source={imageSource} resizeMode='contain' />
         }
       </View>
       
@@ -147,14 +161,15 @@ const HomeScreen = () => {
               <ActivityIndicator style={styles.iconoSwitch} size="large" color="#bc2b78" />
             :
             <Image
-              style={[styles.iconoSwitch,{tintColor: isEnabled? '#21D348':'#EF4646'}]}
+              style={[styles.iconoSwitch,{
+                tintColor: (guest) ? '#ccc' : (isEnabled ? '#21D348' : '#EF4646')
+              }]}
               source={require('../../assets/iconoPedir.png')}
             />
           }
           <Switch
             trackColor={{ false: "#767577", true: "#619288" }}
-            thumbColor={isEnabled ? "#619288" : "#619288"}
-            ios_backgroundColor="#3e3e3e"
+            thumbColor={(guest) ? '#ddd' : '#619288'}
             onValueChange={toggleSwitch}
             value={isEnabled}
           />
