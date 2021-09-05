@@ -10,7 +10,17 @@ import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DateService from '../../services/DateService';
 import StorageService from '../../services/StorageService';
-import { HmsLocalNotification } from'@hmscore/react-native-hms-push';
+import { HmsLocalNotification, HmsPushEvent } from'@hmscore/react-native-hms-push';
+
+HmsPushEvent.onLocalNotificationAction((result) => {
+  console.log("[onLocalNotificationAction]: " + result);
+  var notification = JSON.parse(result.dataJSON);
+  if (notification.action === "Yes") {
+    HmsLocalNotification.cancelNotificationsWithId([notification.id]);
+  }
+  console.log("Clicked: " + notification.action);
+});
+
 const ScheduleScreen = ({navigation}) => {
   const [user, setUser] = useState({
     openId: ''
@@ -174,13 +184,13 @@ const ScheduleScreen = ({navigation}) => {
       [HmsLocalNotification.Attr.ongoing]: false,
       [HmsLocalNotification.Attr.importance]: HmsLocalNotification.Importance.max,
       [HmsLocalNotification.Attr.dontNotifyInForeground]: false,
-      [HmsLocalNotification.Attr.autoCancel]: false,   
+      [HmsLocalNotification.Attr.autoCancel]: false,
+      [HmsLocalNotification.Attr.invokeApp]: false,
       [HmsLocalNotification.Attr.actions]: '["Yes", "No"]',
       [HmsLocalNotification.Attr.fireDate]: new Date(Date.now()).getTime(), // in 1 min
     })
     .then((result) => {
       console.log("LocalNotification Default", result);
-      
     })
     .catch((err) => {
       alert("[LocalNotification Default] Error/Exception: " + JSON.stringify(err));
