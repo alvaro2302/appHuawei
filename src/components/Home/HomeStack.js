@@ -43,18 +43,18 @@ const HomeStack = () => {
         }
       }}/>
       {
-        !guest
+        guest
           ?
-            <Tab.Screen name='Schedule' component={ScheduleStack} options={{
-              tabBarIcon: ({focused}) => {
-                return <Icon name='calendar-sharp' size={16} color='#000' color={colorActivateIcon(focused)}/> 
-              },
-            }}/>
-          : 
             <Tab.Screen name='Schedule' component={ScheduleStack} listeners={disabledTab} options={{
               tabBarIcon: ({focused}) => {
                 return <Icon name='calendar-sharp' size={16} color='#ddd'/> 
               }
+            }}/>
+          :
+            <Tab.Screen name='Schedule' component={ScheduleStack} options={{
+              tabBarIcon: ({focused}) => {
+                return <Icon name='calendar-sharp' size={16} color='#000' color={colorActivateIcon(focused)}/> 
+              },
             }}/>
       }
       <Tab.Screen name='Map' component={MapScreen} options={{

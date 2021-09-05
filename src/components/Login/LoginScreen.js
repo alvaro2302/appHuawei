@@ -44,7 +44,8 @@ const silentSignIn = () => {
 const guestLogin = async () => {
   const guest = {
     avatarUriString: 'Guest',
-    displayName: 'Guest'
+    displayName: 'Guest',
+    openId: 'Guest'
   }
   await saveTokenLocalStorage(guest);
   await saveUser(guest);
@@ -56,10 +57,11 @@ const saveTokenLocalStorage = async (rawToken) => {
 }
 
 const saveUser = async (data) => {
-  const { avatarUriString, displayName } = data;
+  const { avatarUriString, displayName, openId } = data;
   await UserService.saveUser({
     avatarUriString: avatarUriString,
-    displayName: displayName
+    displayName: displayName,
+    openId: openId
   });
 }
 
