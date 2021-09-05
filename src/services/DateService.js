@@ -44,3 +44,31 @@ exports.deleteDay = async(token)=>{
     throw Error(err);
   }
 }
+
+const getNextDayOfWeek = (date, dayOfWeek, hourInitialForm) => {
+  const [ hours, minutes ] = hourInitialForm.split(':', 2);
+  const resultDate = new Date(date.getTime());
+  resultDate.setDate(date.getDate() + (7 + dayOfWeek - date.getDay()) % 7);
+  const scheduleDate = new Date(resultDate.getTime());
+  scheduleDate.setHours(hours, minutes, 0, 0);
+  if(Date.parse(scheduleDate) < Date.parse(date)) {
+    scheduleDate.setDate(scheduleDate.getDate() + 7);
+  }
+  return scheduleDate;
+}
+
+const getWeekCode = (dayForm) => {
+  switch(dayForm) {
+    case 'Domingo': return 0;
+    case 'Lunes': return 1;
+    case 'Martes': return 2;
+    case 'Miercoles': return 3;
+    case 'Jueves': return 4;
+    case 'Viernes': return 5;
+    case 'Sabado': return 6;
+  }
+}
+
+exports.findFireDate = (dayForm, hourInitialForm) => {
+  return getNextDayOfWeek(new Date(), getWeekCode(dayForm), hourInitialForm);
+}
