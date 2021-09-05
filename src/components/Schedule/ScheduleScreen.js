@@ -11,16 +11,21 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import DateService from '../../services/DateService';
 import StorageService from '../../services/StorageService';
 import { HmsLocalNotification, HmsPushEvent } from'@hmscore/react-native-hms-push';
+import uuid from 'react-native-uuid';
 
 HmsPushEvent.onLocalNotificationAction((result) => {
   console.log("[onLocalNotificationAction]: " + result);
   const notification = JSON.parse(result.dataJSON);
-  if (notification.action === "Yes") {
-    HmsLocalNotification.cancelNotificationsWithTag('hms_tag').then((result) => {
-      console.log(result);
-    });
-  }
-  console.log("Clicked: " + notification.action);
+  const { action, tag } = notification;
+  HmsLocalNotification.cancelNotificationsWithTag(tag).then((result) => {
+    if (notification.action === "Marcar ubicación") {
+
+    }
+    if (notification.action === "Postergar una semana") {
+
+    }
+    console.log("Clicked: " + notification.action);
+  });
 });
 
 const ScheduleScreen = ({navigation}) => {
@@ -170,26 +175,27 @@ const ScheduleScreen = ({navigation}) => {
     }
   }
 
-  const programateNotification=(day, hour)=>{
+  const programateNotification = (day, hour)=>{
+    const fireDate = DateService.findFireDate(day, hour);
     HmsLocalNotification.localNotificationSchedule({
-      [HmsLocalNotification.Attr.title]: 'Alerta de Transporte ',
-      [HmsLocalNotification.Attr.message]: 'los conductores de transporte esperan saber donde estas', // (required)
-      [HmsLocalNotification.Attr.ticker]: 'hola ya es hora de pedir transporte',
+      [HmsLocalNotification.Attr.title]: 'Alerta de Transporte.',
+      [HmsLocalNotification.Attr.message]: 'Los conductores de transporte esperan saber donde estas.', // (required)
+      [HmsLocalNotification.Attr.ticker]: 'Hola ya es hora de pedir transporte.',
       [HmsLocalNotification.Attr.largeIcon]: 'ic_launcher',
       [HmsLocalNotification.Attr.smallIcon]: 'ic_notification',
-      [HmsLocalNotification.Attr.bigText]: 'ya es hora de estar en el mapa',
-      [HmsLocalNotification.Attr.subText]: 'con solo un toque ',
+      [HmsLocalNotification.Attr.bigText]: 'Ya es hora de estar en el mapa.',
+      [HmsLocalNotification.Attr.subText]: 'Con solo un toque.',
       [HmsLocalNotification.Attr.color]: 'white',
       [HmsLocalNotification.Attr.vibrate]: true,
       [HmsLocalNotification.Attr.vibrateDuration]: 1000,
-      [HmsLocalNotification.Attr.tag]: 'hms_tag',
-      [HmsLocalNotification.Attr.ongoing]: true,
+      [HmsLocalNotification.Attr.tag]: uuid.v4(),
+      [HmsLocalNotification.Attr.ongoing]: false,
       [HmsLocalNotification.Attr.importance]: HmsLocalNotification.Importance.max,
       [HmsLocalNotification.Attr.dontNotifyInForeground]: false,
       [HmsLocalNotification.Attr.autoCancel]: false,
       [HmsLocalNotification.Attr.invokeApp]: false,
-      [HmsLocalNotification.Attr.actions]: '["Yes", "No"]',
-      [HmsLocalNotification.Attr.fireDate]: new Date(Date.now()).getTime(), // in 1 min
+      [HmsLocalNotification.Attr.actions]: '["Marcar ubicación", "Postergar una semana"]',
+      [HmsLocalNotification.Attr.fireDate]: fireDate.getTime(),
     })
     .then((result) => {
       console.log("LocalNotification Default", result);
